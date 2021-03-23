@@ -6,3 +6,21 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
+<h1>Google Maps</h1>
+<div id="mapPrincipal"></div>
+<script>
+    function initMap() {
+        var options = {
+            zoom: 15,
+            center: { lat: 39.6019900, lng: -8.4092400 }
+        }
+        var map = new google.maps.Map(document.getElementById('mapPrincipal'), options);
+
+        new google.maps.Marker({
+            position: { lat: 39.6019900, lng: -8.4092400 }, map, title: "Santa Iria",
+        });
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
+</script>

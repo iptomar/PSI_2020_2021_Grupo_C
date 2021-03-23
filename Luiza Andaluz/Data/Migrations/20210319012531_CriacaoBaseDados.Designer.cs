@@ -4,20 +4,38 @@ using Luiza_Andaluz.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Luiza_Andaluz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210319012531_CriacaoBaseDados")]
+    partial class CriacaoBaseDados
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.13")
+                .HasAnnotation("ProductVersion", "3.1.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("LuizaAndaluz.Models.Anonimo", b =>
+                {
+                    b.Property<string>("ID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Idade")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Utilizadores");
+                });
 
             modelBuilder.Entity("LuizaAndaluz.Models.Conteudo", b =>
                 {
@@ -46,24 +64,19 @@ namespace Luiza_Andaluz.Data.Migrations
                     b.Property<string>("ID")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("AnonimoFK")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Email")
+                    b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Idade")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LocalFK")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Titulo")
                         .HasColumnType("nvarchar(max)");
@@ -73,6 +86,8 @@ namespace Luiza_Andaluz.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("AnonimoFK");
 
                     b.HasIndex("LocalFK");
 
@@ -326,6 +341,12 @@ namespace Luiza_Andaluz.Data.Migrations
 
             modelBuilder.Entity("LuizaAndaluz.Models.Historia", b =>
                 {
+                    b.HasOne("LuizaAndaluz.Models.Anonimo", "Anonimo")
+                        .WithMany("Historia")
+                        .HasForeignKey("AnonimoFK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LuizaAndaluz.Models.Local", "Local")
                         .WithMany("Historia")
                         .HasForeignKey("LocalFK")
