@@ -1,0 +1,109 @@
+﻿@model LuizaAndaluz.Models.Historia
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Historia</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <script>
+            function initMap() {
+                var options = {
+                    zoom: 15,
+                    center: { lat: 39.6019900, lng: -8.4092400 }
+                }
+                var map = new google.maps.Map(document.getElementById('mapSecundario'), options);
+
+                const locationButton = document.createElement("button");
+                locationButton.textContent = "Ir para a minha localização";
+                locationButton.classList.add("custom-map-control-button");
+
+                map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+
+                locationButton.addEventListener("click", () => {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            (position) => {
+                                const pos = {
+                                    lat: position.coords.latitude,
+                                    lng: position.coords.longitude,
+                                };
+                                map.setCenter(pos);
+                            },
+                            () => {
+                                alert("Não foi possivel centrar o mapa na sua localização");
+                            }
+                        );
+                    } else {
+                        alert("Não foi possivel centrar o mapa na sua localização");
+                    }
+                });
+
+                const locationButton2 = document.createElement("button");
+                locationButton2.textContent = "Marcar Local";
+                locationButton2.classList.add("custom-map-control-button");
+                map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton2);
+                locationButton2.addEventListener("click", () => {
+                    new google.maps.Marker({
+                        position: { lat: map.getCenter().lat(), lng: map.getCenter().lng() }, map, title: "Ponto",
+                    });
+                });
+            }
+        </script>
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Titulo" class="control-label"></label>
+                <input asp-for="Titulo" class="form-control" />
+                <span asp-validation-for="Titulo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Descricao" class="control-label"></label>
+                <textarea asp-for="Descricao" rows="4" cols="50" class="form-control"></textarea>
+                <span asp-validation-for="Descricao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Carregar Ficheiros</label>
+                <br />
+                <input type="file" style="color:blue;" name="fich[]" multiple="multiple" />
+                <span asp-validation-for="LocalFK" class="text-danger"></span>
+            </div>
+            <label class="control-label">Mapa</label>
+            <div id="mapSecundario"></div>
+            <script async defer
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
+            </script>
+            <br />
+            <div class="form-group">
+                <label asp-for="Nome" class="control-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Idade" class="control-label"></label>
+                <input asp-for="Idade" class="form-control" />
+                <span asp-validation-for="Idade" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
