@@ -46,6 +46,9 @@ namespace Luiza_Andaluz.Data.Migrations
                     b.Property<string>("ID")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
@@ -55,8 +58,8 @@ namespace Luiza_Andaluz.Data.Migrations
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Idade")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Idade")
+                        .HasColumnType("int");
 
                     b.Property<string>("LocalFK")
                         .IsRequired()
@@ -96,7 +99,7 @@ namespace Luiza_Andaluz.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Comentarios");
+                    b.ToTable("Local");
                 });
 
             modelBuilder.Entity("LuizaAndaluz.Models.Utilizador", b =>
@@ -112,7 +115,7 @@ namespace Luiza_Andaluz.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Downloads");
+                    b.ToTable("Utilizador");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

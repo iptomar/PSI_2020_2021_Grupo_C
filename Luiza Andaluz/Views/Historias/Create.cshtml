@@ -16,6 +16,7 @@
                     zoom: 15,
                     center: { lat: 39.6019900, lng: -8.4092400 }
                 }
+
                 var map = new google.maps.Map(document.getElementById('mapSecundario'), options);
 
                 const locationButton = document.createElement("button");
@@ -43,18 +44,27 @@
                     }
                 });
 
-                const locationButton2 = document.createElement("button");
-                locationButton2.textContent = "Marcar Local";
-                locationButton2.classList.add("custom-map-control-button");
-                map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton2);
-                locationButton2.addEventListener("click", () => {
-                    new google.maps.Marker({
-                        position: { lat: map.getCenter().lat(), lng: map.getCenter().lng() }, map, title: "Ponto",
+                var marker = null;
+
+                map.addListener("click", (event) => {
+                    if (marker != null) marker.setMap(null);
+                    marker = new google.maps.Marker({
+                        position: event.latLng, map, title: "Ponto",
                     });
+                    document.getElementById('lat').value = event.latLng.lat();
+                    document.getElementById('lng').value = event.latLng.lng();
                 });
             }
         </script>
-        <form asp-action="Create">
+        <div class="form-group">
+            <label class="control-label">Mapa</label>
+            <div id="mapSecundario"></div>
+            <script async defer
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
+            </script>
+        </div>
+        <br />
+        <form asp-action="Create" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Titulo" class="control-label"></label>
@@ -69,15 +79,8 @@
             <div class="form-group">
                 <label class="control-label">Carregar Ficheiros</label>
                 <br />
-                <input type="file" style="color:blue;" name="fich[]" multiple="multiple" />
-                <span asp-validation-for="LocalFK" class="text-danger"></span>
+                <input type="file" style="color:blue;" name="fich" multiple="multiple" />
             </div>
-            <label class="control-label">Mapa</label>
-            <div id="mapSecundario"></div>
-            <script async defer
-                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
-            </script>
-            <br />
             <div class="form-group">
                 <label asp-for="Nome" class="control-label"></label>
                 <input asp-for="Nome" class="form-control" />
@@ -93,6 +96,8 @@
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
+            <input asp-validation-for="lat" type="hidden" id="lat" name="lat" value="0" />
+            <input asp-validation-for="lng" type="hidden" id="lng" name="lng" value="0" />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

@@ -20,9 +20,11 @@ namespace LuizaAndaluz.Models
 
         public String Nome { get; set; }
 
-        public String Idade { get; set; }
+        public int Idade { get; set; }
 
         public String Email { get; set; }
+
+        public DateTime Data { get; set; }
 
         [Required]
         [ForeignKey(nameof(Local))]
