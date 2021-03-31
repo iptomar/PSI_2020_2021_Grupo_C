@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<LuizaAndaluz.Models.Local>
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -24,3 +25,16 @@
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
 </script>
+<br />
+<div class="row" style="justify-content: center">
+@for (int i = 0; i < 9; i++){
+    <div class="card" style="width: 18rem; margin: 1%">
+        <img src="/Ficheiros/exemplo.jfif" class="card-img-top" alt="/Ficheiros/exemplo.jfif">
+        <div class="card-body">
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+    </div>
+}
+</div>

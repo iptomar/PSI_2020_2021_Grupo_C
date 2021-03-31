@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LuizaAndaluz.Models;
 using Luiza_Andaluz.Data;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace Luiza_Andaluz.Controllers
 {
     public class HistoriasController : Controller
     {
         private readonly ApplicationDbContext _context;
-
-        public HistoriasController(ApplicationDbContext context)
+        private readonly IWebHostEnvironment _caminho;
+        public HistoriasController(ApplicationDbContext context, IWebHostEnvironment caminho)
         {
             _context = context;
+            _caminho = caminho;
         }
 
         // GET: Historias
@@ -49,8 +53,8 @@ namespace Luiza_Andaluz.Controllers
         // GET: Historias/Create
         public IActionResult Create()
         {
-            ViewData["LocalFK"] = new SelectList(_context.Comentarios, "ID", "ID");
-            ViewData["UtilizadorFK"] = new SelectList(_context.Downloads, "ID", "ID");
+            ViewData["LocalFK"] = new SelectList(_context.Local, "ID", "ID");
+            ViewData["UtilizadorFK"] = new SelectList(_context.Utilizador, "ID", "ID");
             return View();
         }
 
@@ -59,17 +63,63 @@ namespace Luiza_Andaluz.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Titulo,Descricao,Estado,Nome,Idade,Email,LocalFK,UtilizadorFK")] Historia historia)
+        public async Task<IActionResult> Create([Bind("ID,Titulo,Descricao,Nome,Idade,Email")] Historia historia, List<IFormFile> fich, String lat, String lng)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(historia);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            if(lat.Equals("0") || lng.Equals("0")){
+                return View();
             }
-            ViewData["LocalFK"] = new SelectList(_context.Comentarios, "ID", "ID", historia.LocalFK);
-            ViewData["UtilizadorFK"] = new SelectList(_context.Downloads, "ID", "ID", historia.UtilizadorFK);
-            return View(historia);
+
+            Local local = new Local
+            {
+                ID = Guid.NewGuid().ToString(),
+                Latitude = lat,
+                Longitude = lng
+            };
+            _context.Add(local);
+            await _context.SaveChangesAsync();
+
+            historia.ID = Guid.NewGuid().ToString();
+            historia.Estado = true;
+            historia.LocalFK = local.ID;
+            historia.UtilizadorFK = "naoval";
+
+            _context.Add(historia);
+            await _context.SaveChangesAsync();
+            
+            foreach(IFormFile ficheiro in fich){
+
+                string caminhoCompleto = "";
+                bool haFicheiro = false;
+
+                if (ficheiro == null) {
+                    return View();
+                }
+                string extensao = Path.GetExtension(ficheiro.FileName).ToLower();
+                string nome = Guid.NewGuid().ToString() + extensao;
+                caminhoCompleto = Path.Combine(_caminho.WebRootPath, "Ficheiros", nome);
+                haFicheiro = true;
+                try
+                {
+                    if (haFicheiro) {
+                        Conteudo cont = new Conteudo
+                        {
+                            ID = Guid.NewGuid().ToString(),
+                            HistoriaFK = historia.ID,
+                            Tipo = extensao,
+                            Ficheiro = nome
+
+                        };
+                        using var stream = new FileStream(caminhoCompleto, FileMode.Create);
+                        await ficheiro.CopyToAsync(stream);
+                    }
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception) {
+
+                }
+            }
+            return View();
+
         }
 
         // GET: Historias/Edit/5
@@ -85,8 +135,8 @@ namespace Luiza_Andaluz.Controllers
             {
                 return NotFound();
             }
-            ViewData["LocalFK"] = new SelectList(_context.Comentarios, "ID", "ID", historia.LocalFK);
-            ViewData["UtilizadorFK"] = new SelectList(_context.Downloads, "ID", "ID", historia.UtilizadorFK);
+            ViewData["LocalFK"] = new SelectList(_context.Local, "ID", "ID", historia.LocalFK);
+            ViewData["UtilizadorFK"] = new SelectList(_context.Utilizador, "ID", "ID", historia.UtilizadorFK);
             return View(historia);
         }
 
@@ -122,8 +172,8 @@ namespace Luiza_Andaluz.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LocalFK"] = new SelectList(_context.Comentarios, "ID", "ID", historia.LocalFK);
-            ViewData["UtilizadorFK"] = new SelectList(_context.Downloads, "ID", "ID", historia.UtilizadorFK);
+            ViewData["LocalFK"] = new SelectList(_context.Local, "ID", "ID", historia.LocalFK);
+            ViewData["UtilizadorFK"] = new SelectList(_context.Utilizador, "ID", "ID", historia.UtilizadorFK);
             return View(historia);
         }
 

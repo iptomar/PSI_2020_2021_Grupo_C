@@ -11,8 +11,8 @@ namespace Luiza_Andaluz.Data
     {
         public DbSet<Conteudo> Areas { get; set; }
         public DbSet<Historia> Ficheiros { get; set; }
-        public DbSet<Local> Comentarios { get; set; }
-        public DbSet<Utilizador> Downloads { get; set; }
+        public DbSet<Local> Local { get; set; }
+        public DbSet<Utilizador> Utilizador { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
