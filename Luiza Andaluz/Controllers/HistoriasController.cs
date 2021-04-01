@@ -38,7 +38,34 @@ namespace Luiza_Andaluz.Controllers
         public async Task<IActionResult> PorValidar()
         {
             var applicationDbContext = _context.Historias.Where(e => e.Estado == false);
+
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        // GET: Historias
+        public IActionResult GetHistoriasByLocation(string lat, string lng)
+        {
+
+            Local local = null;
+            List<NewHistoria> historias = null;
+            try
+            {
+                local = _context.Local.Where(l => l.Latitude == lat && l.Longitude == lng).FirstOrDefault();
+                historias = _context.Historias.Where(h => h.LocalFK == local.ID).Select(x => new NewHistoria
+                {
+
+                    ID = x.ID,
+                    Descricao = x.Descricao,
+                    Titulo = x.Titulo,
+                    Data = x.Data.ToString("dd-MM-yyyy"),
+                }).ToList();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Erro interno");
+            }
+
+            return Ok(historias);
         }
 
         // GET: Historias/Details/5
@@ -90,7 +117,8 @@ namespace Luiza_Andaluz.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Titulo,Descricao,Nome,Idade,Email")] Historia historia, List<IFormFile> fich, String lat, String lng)
         {
-            if(lat.Equals("0") || lng.Equals("0")){
+            if (lat.Equals("0") || lng.Equals("0"))
+            {
                 return View();
             }
 
@@ -112,13 +140,15 @@ namespace Luiza_Andaluz.Controllers
 
             _context.Historias.Add(historia);
             await _context.SaveChangesAsync();
-            
-            foreach(IFormFile ficheiro in fich){
+
+            foreach (IFormFile ficheiro in fich)
+            {
 
                 string caminhoCompleto = "";
                 bool haFicheiro = false;
 
-                if (ficheiro == null) {
+                if (ficheiro == null)
+                {
                     return View();
                 }
                 string extensao = Path.GetExtension(ficheiro.FileName).ToLower();
@@ -127,7 +157,8 @@ namespace Luiza_Andaluz.Controllers
                 haFicheiro = true;
                 try
                 {
-                    if (haFicheiro) {
+                    if (haFicheiro)
+                    {
                         Conteudo cont = new Conteudo
                         {
                             ID = Guid.NewGuid().ToString(),
@@ -147,7 +178,7 @@ namespace Luiza_Andaluz.Controllers
                     return View();
                 }
             }
-            return RedirectToAction("home"); ;
+            return RedirectToAction("/home"); ;
 
         }
 
@@ -239,4 +270,13 @@ namespace Luiza_Andaluz.Controllers
             return _context.Historias.Any(e => e.ID == id);
         }
     }
+
+    public class NewHistoria
+    {
+        public string ID;
+        public string Descricao;
+        public string Titulo;
+        public string Data;
+    }
+
 }
