@@ -3,23 +3,24 @@
     ViewData["Title"] = "Home Page";
 }
 
+
 <div class="mx-5">
     <div id="mySidenav" class="sidenav px-2"></div>
 
-    <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    </div>
-    <h1>Google Maps</h1>
-    <div id="mapPrincipal"></div>
+  <div class="text-center">
+      <h1 class="display-4">Luiza Andaluz</h1>
+      <p>Uma religiosa católica e educadora</p>
+  </div>
+  <div id="mapPrincipal"></div>
 </div>
 
 <script>
     function initMap() {
         var options = {
-            zoom: 15,
+            zoom: 2,
             center: { lat: 39.6019900, lng: -8.4092400 }
         }
+
         var map = new google.maps.Map(document.getElementById('mapPrincipal'), options);
         var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
 
