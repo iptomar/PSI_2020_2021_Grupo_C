@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Luiza_Andaluz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210331195302_test2")]
-    partial class test2
+    [Migration("20210401161231_main-merge")]
+    partial class mainmerge
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,15 +73,12 @@ namespace Luiza_Andaluz.Data.Migrations
                     b.Property<string>("Titulo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UtilizadorFK")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<string>("Validador")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
                     b.HasIndex("LocalFK");
-
-                    b.HasIndex("UtilizadorFK");
 
                     b.ToTable("Historias");
                 });
@@ -102,22 +99,6 @@ namespace Luiza_Andaluz.Data.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Local");
-                });
-
-            modelBuilder.Entity("LuizaAndaluz.Models.Utilizador", b =>
-                {
-                    b.Property<string>("ID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Aut")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Nascimento")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Utilizador");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -334,12 +315,6 @@ namespace Luiza_Andaluz.Data.Migrations
                     b.HasOne("LuizaAndaluz.Models.Local", "Local")
                         .WithMany("Historia")
                         .HasForeignKey("LocalFK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("LuizaAndaluz.Models.Utilizador", "Utilizador")
-                        .WithMany("Historia")
-                        .HasForeignKey("UtilizadorFK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

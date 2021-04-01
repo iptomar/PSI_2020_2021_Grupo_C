@@ -77,8 +77,6 @@ namespace Luiza_Andaluz.Data.Migrations
                     b.HasKey("ID");
 
                     b.HasIndex("LocalFK");
-                    
-                    b.HasIndex("UtilizadorFK");
 
                     b.ToTable("Historias");
                 });

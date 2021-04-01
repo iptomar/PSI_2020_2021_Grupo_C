@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Luiza_Andaluz.Data.Migrations
 {
-    public partial class TabelaNaoNecessaria : Migration
+    public partial class mainmerge : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

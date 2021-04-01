@@ -60,7 +60,7 @@ namespace Luiza_Andaluz.Controllers
                     Data = x.Data.ToString("dd-MM-yyyy"),
                 }).ToList();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Erro interno");
             }
@@ -174,11 +174,12 @@ namespace Luiza_Andaluz.Controllers
                         await _context.SaveChangesAsync();
                     }
                 }
-                catch (Exception) {
+                catch (Exception)
+                {
                     return View();
                 }
             }
-            return RedirectToAction("/home"); ;
+            return RedirectToAction("home"); ;
 
         }
 
