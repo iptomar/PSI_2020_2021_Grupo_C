@@ -9,10 +9,9 @@ namespace Luiza_Andaluz.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
-        public DbSet<Conteudo> Areas { get; set; }
-        public DbSet<Historia> Ficheiros { get; set; }
+        public DbSet<Conteudo> Conteudo { get; set; }
+        public DbSet<Historia> Historias { get; set; }
         public DbSet<Local> Local { get; set; }
-        public DbSet<Utilizador> Utilizador { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

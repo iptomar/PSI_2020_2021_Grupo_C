@@ -23,7 +23,8 @@ namespace Luiza_Andaluz.Controllers
         }
 
         public IActionResult Index(){
-            return View(_context.Local.ToList());
+            ViewBag.locais = _context.Local.ToList();
+            return View();
         }
 
         public IActionResult Privacy()
