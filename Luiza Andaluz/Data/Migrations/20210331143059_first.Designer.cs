@@ -4,14 +4,16 @@ using Luiza_Andaluz.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Luiza_Andaluz.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210331143059_first")]
+    partial class first
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,7 +40,7 @@ namespace Luiza_Andaluz.Data.Migrations
 
                     b.HasIndex("HistoriaFK");
 
-                    b.ToTable("Conteudo");
+                    b.ToTable("Areas");
                 });
 
             modelBuilder.Entity("LuizaAndaluz.Models.Historia", b =>
@@ -81,7 +83,7 @@ namespace Luiza_Andaluz.Data.Migrations
 
                     b.HasIndex("UtilizadorFK");
 
-                    b.ToTable("Historias");
+                    b.ToTable("Ficheiros");
                 });
 
             modelBuilder.Entity("LuizaAndaluz.Models.Local", b =>

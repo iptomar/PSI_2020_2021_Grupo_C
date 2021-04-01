@@ -22,8 +22,11 @@ namespace Luiza_Andaluz.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index(){
-            return View(_context.Local.ToList());
+        public async Task<IActionResult> Index()
+        {
+            ViewBag.locais = _context.Local.ToList();
+            var applicationDbContext = _context.Historias.Include(h => h.Local).Include(h => h.Utilizador);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         public IActionResult Privacy()

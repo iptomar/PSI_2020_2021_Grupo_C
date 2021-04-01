@@ -1,14 +1,19 @@
-﻿@model IEnumerable<LuizaAndaluz.Models.Local>
+﻿@model IEnumerable<LuizaAndaluz.Models.Historia>
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="mx-5">
+    <div id="mySidenav" class="sidenav px-2"></div>
+
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>
+    <h1>Google Maps</h1>
+    <div id="mapPrincipal"></div>
 </div>
-<h1>Google Maps</h1>
-<div id="mapPrincipal"></div>
+
 <script>
     function initMap() {
         var options = {
@@ -16,25 +21,68 @@
             center: { lat: 39.6019900, lng: -8.4092400 }
         }
         var map = new google.maps.Map(document.getElementById('mapPrincipal'), options);
+        var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
 
-        new google.maps.Marker({
-            position: { lat: 39.6019900, lng: -8.4092400 }, map, title: "Santa Iria",
-        });
+         for (var i = 0; i < locais.length; i++) {
+             const marker = new google.maps.Marker({
+                 position: { lat: parseFloat(locais[i].latitude), lng: parseFloat(locais[i].longitude) }, map, title: (i + ""),
+             });
+
+            marker.addListener("click", () => {
+                openNav();
+                lat = parseFloat(marker.getPosition().lat());
+                lng = parseFloat(marker.getPosition().lng());
+
+                $.ajax({
+                    type: "GET",
+                    url: `/Historias/GetHistoriasByLocation?lat=${lat}&lng=${lng}`,
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (response) {
+                        //populate the form elements with the returned data
+                        var s="<div class='row pr-1'>"+
+                            "<div class='col-10 align-self-center'><h3>Histórias</h3></div>" +
+                            "<div class='col-2'>"+
+                                "<button type='button' class='close float-right' onclick='closeNav()' aria-label='Close'>"+
+                                    "<span aria-hidden='true'>&times;</span>"+
+                                "</button>" +
+                            "</div>"+
+                        "</div>";
+
+                        response.forEach(element => {
+                            s+="<div class='card d-lg-block'>"+
+                                    "<img src='/Ficheiros/exemplo.jfif' class='card-img-top' alt='/Ficheiros/exemplo.jfif'>" +
+                                    "<div class='card-body'>"+
+                                        "<a href='historias/details/"+element.id+"'>" +
+                                            "<h5 class='card-title'>"+element.titulo+"</h5>"+
+                                        "</a>"+
+                                        "<p class='card-text'>" + element.descricao +"</p>"+
+                                        "<p class='card-text small'>" + element.data +"</p>"+
+                                    "</div>"+
+                                "</div>";
+                        })
+
+                        document.getElementById("mySidenav").innerHTML = "";
+                        document.getElementById("mySidenav").innerHTML += s;
+
+                    },
+                    failure: function (response) {
+                        //handle the error
+                    }
+                });
+            });
+        }
+    }
+
+    function openNav() {
+        document.getElementById("mySidenav").style.display = "block";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.display = "none";
     }
 </script>
+
 <script async defer
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
 </script>
-<br />
-<div class="row" style="justify-content: center">
-@for (int i = 0; i < 9; i++){
-    <div class="card" style="width: 18rem; margin: 1%">
-        <img src="/Ficheiros/exemplo.jfif" class="card-img-top" alt="/Ficheiros/exemplo.jfif">
-        <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-        </div>
-    </div>
-}
-</div>
