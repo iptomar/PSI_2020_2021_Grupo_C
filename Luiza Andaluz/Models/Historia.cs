@@ -26,15 +26,12 @@ namespace LuizaAndaluz.Models
 
         public DateTime Data { get; set; }
 
+        public String Validador { get; set; }
+
         [Required]
         [ForeignKey(nameof(Local))]
         public String LocalFK { get; set; }
         public Local Local { get; set; }
-
-        [Required]
-        [ForeignKey(nameof(Utilizador))]
-        public String UtilizadorFK { get; set; }
-        public Utilizador Utilizador { get; set; }
 
         public virtual ICollection<Conteudo> Conteudo { get; set; }
         public Historia()

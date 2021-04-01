@@ -4,22 +4,26 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Luiza Andaluz</h1>
+    <p>Uma religiosa católica e educadora</p>
 </div>
-<h1>Google Maps</h1>
 <div id="mapPrincipal"></div>
 <script>
     function initMap() {
         var options = {
-            zoom: 15,
+            zoom: 2,
             center: { lat: 39.6019900, lng: -8.4092400 }
         }
+
         var map = new google.maps.Map(document.getElementById('mapPrincipal'), options);
 
-        new google.maps.Marker({
-            position: { lat: 39.6019900, lng: -8.4092400 }, map, title: "Santa Iria",
-        });
+        var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
+
+        for (var i = 0; i < locais.length; i++) {
+            new google.maps.Marker({
+                position: { lat: parseFloat(locais[i].latitude), lng: parseFloat(locais[i].longitude) }, map, title: (i + ""),
+            });
+        }
     }
 </script>
 <script async defer

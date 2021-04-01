@@ -10,6 +10,8 @@ using Luiza_Andaluz.Data;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace Luiza_Andaluz.Controllers
 {
@@ -17,16 +19,25 @@ namespace Luiza_Andaluz.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _caminho;
-        public HistoriasController(ApplicationDbContext context, IWebHostEnvironment caminho)
+        private readonly UserManager<IdentityUser> _userManager;
+        public HistoriasController(ApplicationDbContext context, IWebHostEnvironment caminho, UserManager<IdentityUser> userManager)
         {
             _context = context;
             _caminho = caminho;
+            _userManager = userManager;
         }
 
         // GET: Historias
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Ficheiros.Include(h => h.Local).Include(h => h.Utilizador);
+            var applicationDbContext = _context.Historias.Include(h => h.Local);
+            return View(await applicationDbContext.ToListAsync());
+        }
+
+        [Authorize]
+        public async Task<IActionResult> PorValidar()
+        {
+            var applicationDbContext = _context.Historias.Where(e => e.Estado == false);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,24 +49,38 @@ namespace Luiza_Andaluz.Controllers
                 return NotFound();
             }
 
-            var historia = await _context.Ficheiros
+            var historia = await _context.Historias
                 .Include(h => h.Local)
-                .Include(h => h.Utilizador)
+                .Include(h => h.Conteudo)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (historia == null)
             {
                 return NotFound();
             }
 
+            Local loc = await _context.Local.FirstOrDefaultAsync(l => l.ID == historia.LocalFK);
+            ViewBag.latitude = loc.Latitude;
+            ViewBag.longitude = loc.Longitude;
             return View(historia);
         }
 
         // GET: Historias/Create
         public IActionResult Create()
         {
-            ViewData["LocalFK"] = new SelectList(_context.Local, "ID", "ID");
-            ViewData["UtilizadorFK"] = new SelectList(_context.Utilizador, "ID", "ID");
             return View();
+        }
+
+        [HttpPost, ActionName("Validar")]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Validar(string id)
+        {
+            Historia hist = _context.Historias.FirstOrDefault(d => d.ID == id);
+            hist.Validador = _userManager.GetUserId(User);
+            hist.Estado = true;
+            _context.Update(hist);
+            await _context.SaveChangesAsync();
+            return Redirect("Details/" + id);
         }
 
         // POST: Historias/Create
@@ -79,11 +104,13 @@ namespace Luiza_Andaluz.Controllers
             await _context.SaveChangesAsync();
 
             historia.ID = Guid.NewGuid().ToString();
-            historia.Estado = true;
+            historia.Estado = false;
             historia.LocalFK = local.ID;
-            historia.UtilizadorFK = "naoval";
+            historia.Local = local;
+            historia.Data = DateTime.Now;
+            historia.Validador = null;
 
-            _context.Add(historia);
+            _context.Historias.Add(historia);
             await _context.SaveChangesAsync();
             
             foreach(IFormFile ficheiro in fich){
@@ -105,20 +132,22 @@ namespace Luiza_Andaluz.Controllers
                         {
                             ID = Guid.NewGuid().ToString(),
                             HistoriaFK = historia.ID,
+                            Historia = historia,
                             Tipo = extensao,
-                            Ficheiro = nome
-
+                            Ficheiro = nome,
                         };
                         using var stream = new FileStream(caminhoCompleto, FileMode.Create);
                         await ficheiro.CopyToAsync(stream);
+
+                        _context.Conteudo.Add(cont);
+                        await _context.SaveChangesAsync();
                     }
-                    return RedirectToAction(nameof(Index));
                 }
                 catch (Exception) {
-
+                    return View();
                 }
             }
-            return View();
+            return RedirectToAction("home"); ;
 
         }
 
@@ -130,13 +159,12 @@ namespace Luiza_Andaluz.Controllers
                 return NotFound();
             }
 
-            var historia = await _context.Ficheiros.FindAsync(id);
+            var historia = await _context.Historias.FindAsync(id);
             if (historia == null)
             {
                 return NotFound();
             }
             ViewData["LocalFK"] = new SelectList(_context.Local, "ID", "ID", historia.LocalFK);
-            ViewData["UtilizadorFK"] = new SelectList(_context.Utilizador, "ID", "ID", historia.UtilizadorFK);
             return View(historia);
         }
 
@@ -173,7 +201,6 @@ namespace Luiza_Andaluz.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["LocalFK"] = new SelectList(_context.Local, "ID", "ID", historia.LocalFK);
-            ViewData["UtilizadorFK"] = new SelectList(_context.Utilizador, "ID", "ID", historia.UtilizadorFK);
             return View(historia);
         }
 
@@ -185,9 +212,8 @@ namespace Luiza_Andaluz.Controllers
                 return NotFound();
             }
 
-            var historia = await _context.Ficheiros
+            var historia = await _context.Historias
                 .Include(h => h.Local)
-                .Include(h => h.Utilizador)
                 .FirstOrDefaultAsync(m => m.ID == id);
             if (historia == null)
             {
@@ -202,15 +228,15 @@ namespace Luiza_Andaluz.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var historia = await _context.Ficheiros.FindAsync(id);
-            _context.Ficheiros.Remove(historia);
+            var historia = await _context.Historias.FindAsync(id);
+            _context.Historias.Remove(historia);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool HistoriaExists(string id)
         {
-            return _context.Ficheiros.Any(e => e.ID == id);
+            return _context.Historias.Any(e => e.ID == id);
         }
     }
 }
