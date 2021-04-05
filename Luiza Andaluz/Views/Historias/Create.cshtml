@@ -19,6 +19,22 @@
 
                 var map = new google.maps.Map(document.getElementById('mapSecundario'), options);
 
+                //recebe locais
+                var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
+                //coloca marcadores de locais existentes no mapa
+                for (var i = 0; i < locais.length; i++) {
+                    const mark = new google.maps.Marker({
+                        position: { lat: parseFloat(locais[i].latitude), lng: parseFloat(locais[i].longitude) }, map, title: (i + ""),
+                    });
+                    //se um marcador for selecionado ele é guardado no formulário
+                    mark.addListener("click", () => {
+                        lat = parseFloat(mark.getPosition().lat());
+                        lng = parseFloat(mark.getPosition().lng());
+                        document.getElementById('lat').value = lat;
+                        document.getElementById('lng').value = lng;
+                    });
+                }
+                
                 const locationButton = document.createElement("button");
                 locationButton.textContent = "Ir para a minha localização";
                 locationButton.classList.add("custom-map-control-button");
@@ -44,13 +60,16 @@
                     }
                 });
 
+                
                 var marker = null;
-
+                //selecionar um novo local do mapa
                 map.addListener("click", (event) => {
                     if (marker != null) marker.setMap(null);
+                    //coloca marcador
                     marker = new google.maps.Marker({
                         position: event.latLng, map, title: "Ponto",
                     });
+                    //guarda no formulário
                     document.getElementById('lat').value = event.latLng.lat();
                     document.getElementById('lng').value = event.latLng.lng();
                 });

@@ -94,6 +94,8 @@ namespace Luiza_Andaluz.Controllers
         // GET: Historias/Create
         public IActionResult Create()
         {
+            ViewBag.locais = _context.Local.ToList();
+            //var applicationDbContext = _context.Historias.Include(h => h.Local);
             return View();
         }
 
@@ -117,20 +119,36 @@ namespace Luiza_Andaluz.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Titulo,Descricao,Nome,Idade,Email")] Historia historia, List<IFormFile> fich, String lat, String lng)
         {
+            //verifica se existem valores do local
             if (lat.Equals("0") || lng.Equals("0"))
             {
                 return View();
             }
 
-            Local local = new Local
+            Local localbd = null;
+            Local local = null;
+            //consulta para encontrar um local na bd que tenha os valores do local escolhido
+            localbd = _context.Local.Where(l => l.Latitude == lat && l.Longitude == lng).FirstOrDefault();
+            //se não encontrar resultados
+            if (localbd == null)
             {
-                ID = Guid.NewGuid().ToString(),
-                Latitude = lat,
-                Longitude = lng
-            };
-            _context.Add(local);
-            await _context.SaveChangesAsync();
+                //cria novo local
+                local = new Local
+                {
+                    ID = Guid.NewGuid().ToString(),
+                    Latitude = lat,
+                    Longitude = lng
+                };
+                _context.Add(local);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                //o local existe logo não se faz novo registo de local
+                local = localbd;
+            }
 
+            //criação da história
             historia.ID = Guid.NewGuid().ToString();
             historia.Estado = false;
             historia.LocalFK = local.ID;
@@ -179,7 +197,7 @@ namespace Luiza_Andaluz.Controllers
                     return View();
                 }
             }
-            return RedirectToAction("home"); ;
+            return Redirect("/"); ;
 
         }
 
