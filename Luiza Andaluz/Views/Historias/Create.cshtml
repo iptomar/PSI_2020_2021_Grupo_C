@@ -53,7 +53,26 @@
                     });
                     document.getElementById('lat').value = event.latLng.lat();
                     document.getElementById('lng').value = event.latLng.lng();
+                    document.getElementById('aviso').innerHTML = "Localização Marcada";
                 });
+
+                var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
+
+                for (var i = 0; i < locais.length; i++) {
+                    const marker1 = new google.maps.Marker({
+                        position: { lat: parseFloat(locais[i].latitude), lng: parseFloat(locais[i].longitude) }, map, title: (i + ""), icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                    });
+
+                    marker1.addListener("click", () => {
+                        if (marker != null) {
+                            marker.setMap(null);
+                            marker = null;
+                        }
+                        document.getElementById('lat').value = marker1.position.lat();
+                        document.getElementById('lng').value = marker1.position.lng();
+                        document.getElementById('aviso').innerHTML = "Localização Marcada";
+                    });
+                }
             }
         </script>
         <div class="form-group">
@@ -63,6 +82,7 @@
                     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
             </script>
         </div>
+        <h4 id="aviso"></h4>
         <br />
         <form asp-action="Create" enctype="multipart/form-data" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
