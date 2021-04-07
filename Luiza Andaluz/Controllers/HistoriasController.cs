@@ -30,7 +30,12 @@ namespace Luiza_Andaluz.Controllers
         // GET: Historias
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Historias.Include(h => h.Local);
+            var applicationDbContext = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true);
+            ViewBag.locais = applicationDbContext.Select(x => new NewLocal
+            {
+                latitude = x.Local.Latitude,
+                longitude = x.Local.Longitude
+            }).ToList();
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,7 +43,6 @@ namespace Luiza_Andaluz.Controllers
         public async Task<IActionResult> PorValidar()
         {
             var applicationDbContext = _context.Historias.Where(e => e.Estado == false);
-
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -53,7 +57,6 @@ namespace Luiza_Andaluz.Controllers
                 local = _context.Local.Where(l => l.Latitude == lat && l.Longitude == lng).FirstOrDefault();
                 historias = _context.Historias.Where(h => h.LocalFK == local.ID).Select(x => new NewHistoria
                 {
-
                     ID = x.ID,
                     Descricao = x.Descricao,
                     Titulo = x.Titulo,
@@ -94,6 +97,7 @@ namespace Luiza_Andaluz.Controllers
         // GET: Historias/Create
         public IActionResult Create()
         {
+            ViewBag.locais = _context.Local.ToList();
             return View();
         }
 
@@ -121,15 +125,24 @@ namespace Luiza_Andaluz.Controllers
             {
                 return View();
             }
-
-            Local local = new Local
+            Local local = null;
+            if (_context.Local.Any(l => l.Latitude == lat && l.Longitude == lng))
             {
-                ID = Guid.NewGuid().ToString(),
-                Latitude = lat,
-                Longitude = lng
-            };
-            _context.Add(local);
-            await _context.SaveChangesAsync();
+                local = await _context.Local.FirstOrDefaultAsync(l => l.Latitude == lat && l.Longitude == lng);
+
+            }
+            else
+            {
+                local = new Local
+                {
+                    ID = Guid.NewGuid().ToString(),
+                    Latitude = lat,
+                    Longitude = lng
+                };
+                _context.Add(local);
+                await _context.SaveChangesAsync();
+            }
+
 
             historia.ID = Guid.NewGuid().ToString();
             historia.Estado = false;
@@ -143,7 +156,6 @@ namespace Luiza_Andaluz.Controllers
 
             foreach (IFormFile ficheiro in fich)
             {
-
                 string caminhoCompleto = "";
                 bool haFicheiro = false;
 
@@ -179,7 +191,7 @@ namespace Luiza_Andaluz.Controllers
                     return View();
                 }
             }
-            return RedirectToAction("home"); ;
+            return RedirectToAction(""); ;
 
         }
 

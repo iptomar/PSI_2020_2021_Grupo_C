@@ -8,39 +8,39 @@
     <h1 class="display-4">@Html.DisplayFor(model => model.Titulo)</h1>
     <br />
     <p>@Html.DisplayFor(model => model.Descricao)<p>
-    <hr />
-    <dl class="row">
-        @if (User.Identity.IsAuthenticated)
-        {
+        <hr />
+        <dl class="row">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Estado)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Estado)
+                </dd>
+            }
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Estado)
+                @Html.DisplayNameFor(model => model.Nome)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Estado)
+                @Html.DisplayFor(model => model.Nome)
             </dd>
-        }
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Idade)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Idade)
-        </dd>
-        @if (User.Identity.IsAuthenticated)
-        {
             <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.Idade)
             </dt>
             <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Email)
+                @Html.DisplayFor(model => model.Idade)
             </dd>
-        }
-    </dl>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+            }
+        </dl>
 </div>
 @if (User.Identity.IsAuthenticated)
 {
@@ -57,25 +57,6 @@
         <a asp-action="Index">Voltar</a>
     </div>
 }
-<br />
-<div id="mapSecundario"></div>
-<script>
-function initMap() {
-    var options = {
-        zoom: 11,
-        center: { lat: parseFloat(@ViewBag.Latitude), lng: parseFloat(@ViewBag.Longitude) }
-    }
-
-    var map = new google.maps.Map(document.getElementById('mapSecundario'), options);
-
-    new google.maps.Marker({
-        position: { lat: parseFloat(@ViewBag.Latitude), lng: parseFloat(@ViewBag.Longitude) }, map, title: ("Localização"),
-    });
-}
-</script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
-</script>
 <br />
 <div>
     @foreach (var item in Model.Conteudo)
@@ -96,3 +77,22 @@ function initMap() {
 
     }
 </div>
+<div id="mapSecundario"></div>
+<script>
+function initMap() {
+    var options = {
+        zoom: 11,
+        center: { lat: parseFloat(@ViewBag.Latitude), lng: parseFloat(@ViewBag.Longitude) }
+    }
+
+    var map = new google.maps.Map(document.getElementById('mapSecundario'), options);
+
+    new google.maps.Marker({
+        position: { lat: parseFloat(@ViewBag.Latitude), lng: parseFloat(@ViewBag.Longitude) }, map, title: ("Localização"),
+    });
+}
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
+</script>
+<br />
