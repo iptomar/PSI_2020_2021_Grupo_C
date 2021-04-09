@@ -25,16 +25,8 @@ namespace Luiza_Andaluz.Controllers
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true);
-            ViewBag.locais = applicationDbContext.Select(x => new NewLocal { 
-                                latitude = x.Local.Latitude,
-                                longitude = x.Local.Longitude
-                             }).ToList();
+            ViewBag.locais = applicationDbContext.Select(x => x.Local).ToList();
             return View(await applicationDbContext.ToListAsync());
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -42,10 +34,5 @@ namespace Luiza_Andaluz.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-    }
-    public class NewLocal
-    {
-        public string latitude;
-        public string longitude;
     }
 }

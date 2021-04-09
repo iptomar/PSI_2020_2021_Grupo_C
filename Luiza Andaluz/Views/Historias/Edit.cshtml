@@ -4,12 +4,90 @@
     ViewData["Title"] = "Edit";
 }
 
+
+
+
 <h1>Edit</h1>
 
 <h4>Historia</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
+        <script>
+                function initMap() {
+                    var options = {
+                        zoom: 4,
+                        center: { lat: 39.6019900, lng: -8.4092400 }
+                    }
+
+                    var map = new google.maps.Map(document.getElementById('mapSecundario'), options);
+
+                    const locationButton = document.createElement("button");
+                    locationButton.textContent = "Ir para a minha localização";
+                    locationButton.classList.add("custom-map-control-button");
+
+                    map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+
+                    locationButton.addEventListener("click", () => {
+                        if (navigator.geolocation) {
+                            navigator.geolocation.getCurrentPosition(
+                                (position) => {
+                                    const pos = {
+                                        lat: position.coords.latitude,
+                                        lng: position.coords.longitude,
+                                    };
+                                    map.setCenter(pos);
+                                },
+                                () => {
+                                    alert("Não foi possivel centrar o mapa na sua localização");
+                                }
+                            );
+                        } else {
+                            alert("Não foi possivel centrar o mapa na sua localização");
+                        }
+                    });
+
+                    var marker = new google.maps.Marker({
+                        position: {lat:parseFloat(@ViewBag.Latitude), lng: parseFloat(@ViewBag.Longitude)}, map, title: "Ponto",
+                    });;
+
+                    map.addListener("click", (event) => {
+                        if (marker != null) marker.setMap(null);
+                        marker = new google.maps.Marker({
+                            position: event.latLng, map, title: "Ponto",
+                        });
+                        document.getElementById('lat').value = event.latLng.lat();
+                        document.getElementById('lng').value = event.latLng.lng();
+                        document.getElementById('aviso').innerHTML = "Localização Marcada";
+                    });
+
+                    var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
+
+                    for (var i = 0; i < locais.length; i++) {
+                        const marker1 = new google.maps.Marker({
+                            position: { lat: parseFloat(locais[i].latitude), lng: parseFloat(locais[i].longitude) }, map, title: (i + ""), icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                        });
+
+                        marker1.addListener("click", () => {
+                            if (marker != null) {
+                                marker.setMap(null);
+                                marker = null;
+                            }
+                            document.getElementById('lat').value = marker1.position.lat();
+                            document.getElementById('lng').value = marker1.position.lng();
+                            document.getElementById('aviso').innerHTML = "Localização Marcada";
+                        });
+                    }
+                }
+        </script>
+        <div>
+            <label class="control-label">Mapa</label>
+            <div id="mapSecundario"></div>
+            <script async defer
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
+            </script>
+            <h4 id="aviso"></h4>
+        </div>
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />
@@ -20,7 +98,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Descricao" class="control-label"></label>
-                <input asp-for="Descricao" class="form-control" />
+                <textarea asp-for="Descricao" rows="4" cols="50" class="form-control"></textarea>
                 <span asp-validation-for="Descricao" class="text-danger"></span>
             </div>
             <div class="form-group form-check">
@@ -44,9 +122,8 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LocalFK" class="control-label"></label>
-                <select asp-for="LocalFK" class="form-control" asp-items="ViewBag.LocalFK"></select>
-                <span asp-validation-for="LocalFK" class="text-danger"></span>
+                <input asp-validation-for="lat" type="hidden" id="lat" name="lat" value="0" />
+                <input asp-validation-for="lng" type="hidden" id="lng" name="lng" value="0" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
