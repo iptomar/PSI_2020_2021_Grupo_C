@@ -27,8 +27,8 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Titulo)
             </td>
-            <td>
-                @item.Descricao.Substring(0, 60)
+            <td style="word-break: break-all">
+                @Html.DisplayFor(modelItem => item.Descricao)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Data)
