@@ -4,11 +4,8 @@
     ViewData["Title"] = "PorValidar";
 }
 
-<h1>Por Validar</h1>
+<h1>Histórias por Validar</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -31,7 +28,7 @@
                 @Html.DisplayFor(modelItem => item.Titulo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
+                @item.Descricao.Substring(0, 60)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Data)
