@@ -29,6 +29,11 @@ namespace Luiza_Andaluz.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

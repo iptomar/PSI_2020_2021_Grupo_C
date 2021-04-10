@@ -28,7 +28,7 @@
                 @Html.DisplayFor(modelItem => item.Titulo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Descricao)
+                @item.Descricao.Substring(0, 60)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Data)
