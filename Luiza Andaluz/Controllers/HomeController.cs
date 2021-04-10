@@ -24,14 +24,9 @@ namespace Luiza_Andaluz.Controllers
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.locais = _context.Local.ToList();
-            var applicationDbContext = _context.Historias.Include(h => h.Local);
+            var applicationDbContext = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true);
+            ViewBag.locais = applicationDbContext.Select(x => x.Local).ToList();
             return View(await applicationDbContext.ToListAsync());
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

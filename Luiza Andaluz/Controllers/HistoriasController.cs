@@ -30,7 +30,8 @@ namespace Luiza_Andaluz.Controllers
         // GET: Historias
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Historias.Include(h => h.Local);
+            var applicationDbContext = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true);
+            ViewBag.locais = applicationDbContext.Select(x => x.Local).ToList();
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -38,7 +39,6 @@ namespace Luiza_Andaluz.Controllers
         public async Task<IActionResult> PorValidar()
         {
             var applicationDbContext = _context.Historias.Where(e => e.Estado == false);
-
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -53,7 +53,6 @@ namespace Luiza_Andaluz.Controllers
                 local = _context.Local.Where(l => l.Latitude == lat && l.Longitude == lng).FirstOrDefault();
                 historias = _context.Historias.Where(h => h.LocalFK == local.ID).Select(x => new NewHistoria
                 {
-
                     ID = x.ID,
                     Descricao = x.Descricao,
                     Titulo = x.Titulo,
@@ -94,14 +93,14 @@ namespace Luiza_Andaluz.Controllers
         // GET: Historias/Create
         public IActionResult Create()
         {
-            ViewBag.locais = _context.Local.ToList();
-            //var applicationDbContext = _context.Historias.Include(h => h.Local);
-            return View();
+          ViewBag.locais = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true).Select(l => l.Local).ToList();
+          return View();
         }
 
         [HttpPost, ActionName("Validar")]
         [ValidateAntiForgeryToken]
         [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Validar(string id)
         {
             Historia hist = _context.Historias.FirstOrDefault(d => d.ID == id);
@@ -125,14 +124,14 @@ namespace Luiza_Andaluz.Controllers
                 return View();
             }
 
-            Local localbd = null;
             Local local = null;
-            //consulta para encontrar um local na bd que tenha os valores do local escolhido
-            localbd = _context.Local.Where(l => l.Latitude == lat && l.Longitude == lng).FirstOrDefault();
-            //se não encontrar resultados
-            if (localbd == null)
+            if (_context.Local.Any(l => l.Latitude == lat && l.Longitude == lng))
             {
-                //cria novo local
+                local = await _context.Local.FirstOrDefaultAsync(l => l.Latitude == lat && l.Longitude == lng);
+
+            }
+            else
+            {
                 local = new Local
                 {
                     ID = Guid.NewGuid().ToString(),
@@ -142,13 +141,6 @@ namespace Luiza_Andaluz.Controllers
                 _context.Add(local);
                 await _context.SaveChangesAsync();
             }
-            else
-            {
-                //o local existe logo não se faz novo registo de local
-                local = localbd;
-            }
-
-            //criação da história
             historia.ID = Guid.NewGuid().ToString();
             historia.Estado = false;
             historia.LocalFK = local.ID;
@@ -161,7 +153,6 @@ namespace Luiza_Andaluz.Controllers
 
             foreach (IFormFile ficheiro in fich)
             {
-
                 string caminhoCompleto = "";
                 bool haFicheiro = false;
 
@@ -197,8 +188,7 @@ namespace Luiza_Andaluz.Controllers
                     return View();
                 }
             }
-            return Redirect("/"); ;
-
+            return Redirect("~/home"); ;
         }
 
         // GET: Historias/Edit/5
@@ -214,7 +204,10 @@ namespace Luiza_Andaluz.Controllers
             {
                 return NotFound();
             }
-            ViewData["LocalFK"] = new SelectList(_context.Local, "ID", "ID", historia.LocalFK);
+            ViewBag.locais = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true).Select(x => x.Local).ToList();
+            Local loc = await _context.Local.FirstOrDefaultAsync(l => l.ID == historia.LocalFK);
+            ViewBag.Latitude = loc.Latitude;
+            ViewBag.Longitude = loc.Longitude;
             return View(historia);
         }
 
@@ -223,35 +216,53 @@ namespace Luiza_Andaluz.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("ID,Titulo,Descricao,Estado,Nome,Idade,Email,LocalFK,UtilizadorFK")] Historia historia)
+        public async Task<IActionResult> Edit(string id, [Bind("ID,Titulo,Descricao,Estado,Nome,Idade,Email,UtilizadorFK")] Historia historia, String lat, String lng)
         {
             if (id != historia.ID)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            Local local = null;
+
+            if (_context.Local.Any(l => l.Latitude == lat && l.Longitude == lng))
             {
-                try
+                local = await _context.Local.FirstOrDefaultAsync(l => l.Latitude == lat && l.Longitude == lng);
+                _context.Update(local);
+            }
+            else
+            {
+                local = new Local
                 {
-                    _context.Update(historia);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!HistoriaExists(historia.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                    ID = Guid.NewGuid().ToString(),
+                    Latitude = lat,
+                    Longitude = lng
+                };
+                _context.Add(local);
+            }
+
+            try
+            {
+                historia.LocalFK = local.ID;
+                historia.Local = local;
+                _context.Update(historia);
+                await _context.SaveChangesAsync();
+                
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LocalFK"] = new SelectList(_context.Local, "ID", "ID", historia.LocalFK);
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!HistoriaExists(historia.ID)){
+                    return NotFound();
+                }
+            }
+
+            ViewBag.locais = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true).Select(x => x.Local).ToList();
+            Local loc = await _context.Local.FirstOrDefaultAsync(l => l.ID == historia.LocalFK);
+            ViewBag.Latitude = loc.Latitude;
+            ViewBag.Longitude = loc.Longitude;
             return View(historia);
+
         }
 
         // GET: Historias/Delete/5
@@ -279,7 +290,14 @@ namespace Luiza_Andaluz.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             var historia = await _context.Historias.FindAsync(id);
+            var local = await _context.Local.FirstOrDefaultAsync(l => l.ID == historia.LocalFK);
+            var conteudo =  _context.Conteudo.Where(l => l.HistoriaFK == historia.ID).ToList();
             _context.Historias.Remove(historia);
+            if(local.Historia.Count == 1) _context.Local.Remove(local);
+            for(var i = 0; i < conteudo.Count; i++){
+                System.IO.File.Delete(Path.Combine(_caminho.WebRootPath, "Ficheiros", conteudo[i].Ficheiro));
+                _context.Conteudo.Remove(conteudo[i]);
+            }
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

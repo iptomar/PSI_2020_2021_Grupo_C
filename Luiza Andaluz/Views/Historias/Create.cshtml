@@ -4,13 +4,14 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
 
-<h4>Historia</h4>
-<hr />
-<div class="row">
-    <div class="col-md-12">
-        <script>
+    <h1>Create</h1>
+
+    <h4>Historia</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <script>
             function initMap() {
                 var options = {
                     zoom: 4,
@@ -72,61 +73,82 @@
                     //guarda no formulário
                     document.getElementById('lat').value = event.latLng.lat();
                     document.getElementById('lng').value = event.latLng.lng();
+                    document.getElementById('aviso').innerHTML = "Localização Marcada";
                 });
-            }
-        </script>
-        <div class="form-group">
-            <label class="control-label">Mapa</label>
-            <div id="mapSecundario"></div>
-            <script async defer
-                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
-            </script>
-        </div>
-        <br />
-        <form asp-action="Create" enctype="multipart/form-data" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Titulo" class="control-label"></label>
-                <input asp-for="Titulo" class="form-control" />
-                <span asp-validation-for="Titulo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Descricao" class="control-label"></label>
-                <textarea asp-for="Descricao" rows="4" cols="50" class="form-control"></textarea>
-                <span asp-validation-for="Descricao" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label class="control-label">Carregar Ficheiros</label>
-                <br />
-                <input type="file" style="color:blue;" name="fich" multiple="multiple" />
-            </div>
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Idade" class="control-label"></label>
-                <input asp-for="Idade" class="form-control" />
-                <span asp-validation-for="Idade" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <input asp-validation-for="lat" type="hidden" id="lat" name="lat" value="0" />
-            <input asp-validation-for="lng" type="hidden" id="lng" name="lng" value="0" />
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+                var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
+
+                for (var i = 0; i < locais.length; i++) {
+                    const marker1 = new google.maps.Marker({
+                        position: { lat: parseFloat(locais[i].latitude), lng: parseFloat(locais[i].longitude) }, map, title: (i + ""), icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                    });
+
+                    marker1.addListener("click", () => {
+                        if (marker != null) {
+                            marker.setMap(null);
+                            marker = null;
+                        }
+                        document.getElementById('lat').value = marker1.position.lat();
+                        document.getElementById('lng').value = marker1.position.lng();
+                        document.getElementById('aviso').innerHTML = "Localização Marcada";
+                    });
+                }
+            }
+            </script>
+            <div class="form-group">
+                <label class="control-label">Mapa</label>
+                <div id="mapSecundario"></div>
+                <script async defer
+                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
+                </script>
+            </div>
+            <h4 id="aviso"></h4>
+            <br />
+            <form asp-action="Create" enctype="multipart/form-data" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Titulo" class="control-label"></label>
+                    <input asp-for="Titulo" class="form-control" />
+                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Descricao" class="control-label"></label>
+                    <textarea asp-for="Descricao" rows="4" cols="50" class="form-control"></textarea>
+                    <span asp-validation-for="Descricao" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Carregar Ficheiros</label>
+                    <br />
+                    <input type="file" style="color:blue;" name="fich" multiple="multiple" />
+                </div>
+                <div class="form-group">
+                    <label asp-for="Nome" class="control-label"></label>
+                    <input asp-for="Nome" class="form-control" />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Idade" class="control-label"></label>
+                    <input asp-for="Idade" class="form-control" />
+                    <span asp-validation-for="Idade" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <input asp-validation-for="lat" type="hidden" id="lat" name="lat" value="0" />
+                <input asp-validation-for="lng" type="hidden" id="lng" name="lng" value="0" />
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
