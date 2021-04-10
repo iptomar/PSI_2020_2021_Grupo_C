@@ -93,8 +93,8 @@ namespace Luiza_Andaluz.Controllers
         // GET: Historias/Create
         public IActionResult Create()
         {
-            ViewBag.locais = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true).Select(l => l.Local).ToList();
-            return View();
+          ViewBag.locais = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true).Select(l => l.Local).ToList();
+          return View();
         }
 
         [HttpPost, ActionName("Validar")]
@@ -118,6 +118,7 @@ namespace Luiza_Andaluz.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Titulo,Descricao,Nome,Idade,Email")] Historia historia, List<IFormFile> fich, String lat, String lng)
         {
+            //verifica se existem valores do local
             if (lat.Equals("0") || lng.Equals("0"))
             {
                 return View();
@@ -140,8 +141,6 @@ namespace Luiza_Andaluz.Controllers
                 _context.Add(local);
                 await _context.SaveChangesAsync();
             }
-
-
             historia.ID = Guid.NewGuid().ToString();
             historia.Estado = false;
             historia.LocalFK = local.ID;
@@ -190,7 +189,6 @@ namespace Luiza_Andaluz.Controllers
                 }
             }
             return Redirect("~/home"); ;
-
         }
 
         // GET: Historias/Edit/5
