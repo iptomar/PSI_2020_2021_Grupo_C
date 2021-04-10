@@ -42,9 +42,11 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="">   Todas as Histórias   </a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="PorValidar">   Histórias Por Validar   </a>
-                            </li>
+                            @if (User.IsInRole("admin")) {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="PorValidar">   Histórias Por Validar   </a>
+                                </li>
+                            }
                         }
                     </ul>
                 </div>

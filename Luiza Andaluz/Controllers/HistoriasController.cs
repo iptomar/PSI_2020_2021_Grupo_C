@@ -20,36 +20,31 @@ namespace Luiza_Andaluz.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _caminho;
         private readonly UserManager<IdentityUser> _userManager;
-        public HistoriasController(ApplicationDbContext context, IWebHostEnvironment caminho, UserManager<IdentityUser> userManager)
-        {
+        public HistoriasController(ApplicationDbContext context, IWebHostEnvironment caminho, UserManager<IdentityUser> userManager){
             _context = context;
             _caminho = caminho;
             _userManager = userManager;
         }
 
         // GET: Historias
-        public async Task<IActionResult> Index()
-        {
+        [Authorize]
+        public async Task<IActionResult> Index(){
             var applicationDbContext = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true);
-            ViewBag.locais = applicationDbContext.Select(x => x.Local).ToList();
             return View(await applicationDbContext.ToListAsync());
         }
 
         [Authorize]
-        public async Task<IActionResult> PorValidar()
-        {
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> PorValidar(){
             var applicationDbContext = _context.Historias.Where(e => e.Estado == false);
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Historias
-        public IActionResult GetHistoriasByLocation(string lat, string lng)
-        {
-
+        public IActionResult GetHistoriasByLocation(string lat, string lng){
             Local local = null;
             List<NewHistoria> historias = null;
-            try
-            {
+            try{
                 local = _context.Local.Where(l => l.Latitude == lat && l.Longitude == lng).FirstOrDefault();
                 historias = _context.Historias.Where(h => h.LocalFK == local.ID).Select(x => new NewHistoria
                 {
@@ -59,8 +54,7 @@ namespace Luiza_Andaluz.Controllers
                     Data = x.Data.ToString("dd-MM-yyyy"),
                 }).ToList();
             }
-            catch (Exception)
-            {
+            catch (Exception){
                 return StatusCode(StatusCodes.Status500InternalServerError, "Erro interno");
             }
 
@@ -68,10 +62,8 @@ namespace Luiza_Andaluz.Controllers
         }
 
         // GET: Historias/Details/5
-        public async Task<IActionResult> Details(string id)
-        {
-            if (id == null)
-            {
+        public async Task<IActionResult> Details(string id){
+            if (id == null){
                 return NotFound();
             }
 
@@ -79,8 +71,8 @@ namespace Luiza_Andaluz.Controllers
                 .Include(h => h.Local)
                 .Include(h => h.Conteudo)
                 .FirstOrDefaultAsync(m => m.ID == id);
-            if (historia == null)
-            {
+
+            if (historia == null){
                 return NotFound();
             }
 
@@ -100,7 +92,7 @@ namespace Luiza_Andaluz.Controllers
         [HttpPost, ActionName("Validar")]
         [ValidateAntiForgeryToken]
         [Authorize]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Validar(string id)
         {
             Historia hist = _context.Historias.FirstOrDefault(d => d.ID == id);
@@ -140,10 +132,10 @@ namespace Luiza_Andaluz.Controllers
                 _context.Add(local);
                 await _context.SaveChangesAsync();
             }
-
-
-            historia.ID = Guid.NewGuid().ToString();
+            var user = await _userManager.GetUserAsync(User);
             historia.Estado = false;
+            if (user != null) historia.Estado = true;
+            historia.ID = Guid.NewGuid().ToString();
             historia.LocalFK = local.ID;
             historia.Local = local;
             historia.Data = DateTime.Now;
@@ -194,6 +186,8 @@ namespace Luiza_Andaluz.Controllers
         }
 
         // GET: Historias/Edit/5
+        [Authorize]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(string id)
         {
             if (id == null)
@@ -218,6 +212,8 @@ namespace Luiza_Andaluz.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Edit(string id, [Bind("ID,Titulo,Descricao,Estado,Nome,Idade,Email,UtilizadorFK")] Historia historia, String lat, String lng)
         {
             if (id != historia.ID)
@@ -268,6 +264,8 @@ namespace Luiza_Andaluz.Controllers
         }
 
         // GET: Historias/Delete/5
+        [Authorize]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(string id)
         {
             if (id == null)
@@ -289,9 +287,11 @@ namespace Luiza_Andaluz.Controllers
         // POST: Historias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var historia = await _context.Historias.FindAsync(id);
+            var historia = await _context.Historias.FirstOrDefaultAsync(h => h.ID == id);
             var local = await _context.Local.FirstOrDefaultAsync(l => l.ID == historia.LocalFK);
             var conteudo =  _context.Conteudo.Where(l => l.HistoriaFK == historia.ID).ToList();
             _context.Historias.Remove(historia);
