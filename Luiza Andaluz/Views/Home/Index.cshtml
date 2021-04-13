@@ -81,17 +81,27 @@
                         "</div>";
 
                         response.forEach(element => {
-                            s+="<div class='card d-lg-block'>"+
-                                    "<img src='/Ficheiros/exemplo.jfif' class='card-img-top' alt='/Ficheiros/exemplo.jfif'>" +
-                                    "<div class='card-body'>"+
-                                        "<a href='historias/details/"+element.id+"'>" +
-                                            "<h5 class='card-title'>"+element.titulo+"</h5>"+
-                                        "</a>"+
-                                        "<p class='card-text'>" + element.descricao +"</p>"+
-                                        "<p class='card-text small'>" + element.data +"</p>"+
-                                    "</div>"+
+                            console.log(element);
+
+                            s += "<div class='card d-lg-block'>";
+                            if (element.conteudo.endsWith('png') || element.conteudo.endsWith("jpg") || element.conteudo.endsWith("gif") || element.conteudo.endsWith("jfif")) {
+                                s += "<img src='/Ficheiros/" + element.conteudo + "' class='card-img-top' alt='/Ficheiros/" + element.conteudo + "'>";
+                            }
+                            else if (element.conteudo.endsWith('mp4') || element.conteudo.endsWith("mov")) {
+                                s += "<iframe class='card-img-top' src='/Ficheiros/" + element.conteudo + "' allowfullscreen></iframe>"
+                            }
+                            else {
+                                s += "<img src='/Ficheiros/exemplo.jfif' class='card-img-top' alt='/Ficheiros/exemplo.jfif'>";
+                            }
+                            s += "<div class='card-body'>" +
+                                "<a href='historias/details/" + element.id + "'>" +
+                                "<h5 class='card-title'>" + element.titulo + "</h5>" +
+                                "</a>" +
+                                "<p class='card-text'>" + element.descricao + "</p>" +
+                                "<p class='card-text small'>" + element.data + "</p>" +
+                                "</div>" +
                                 "</div>";
-                        })
+                        });
 
                         document.getElementById("mySidenav").innerHTML = "";
                         document.getElementById("mySidenav").innerHTML += s;

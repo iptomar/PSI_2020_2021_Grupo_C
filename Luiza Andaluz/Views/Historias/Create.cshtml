@@ -19,22 +19,6 @@
                 }
 
                 var map = new google.maps.Map(document.getElementById('mapSecundario'), options);
-
-                //recebe locais
-                var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
-                //coloca marcadores de locais existentes no mapa
-                for (var i = 0; i < locais.length; i++) {
-                    const mark = new google.maps.Marker({
-                        position: { lat: parseFloat(locais[i].latitude), lng: parseFloat(locais[i].longitude) }, map, title: (i + ""),
-                    });
-                    //se um marcador for selecionado ele é guardado no formulário
-                    mark.addListener("click", () => {
-                        lat = parseFloat(mark.getPosition().lat());
-                        lng = parseFloat(mark.getPosition().lng());
-                        document.getElementById('lat').value = lat;
-                        document.getElementById('lng').value = lng;
-                    });
-                }
                 
                 const locationButton = document.createElement("button");
                 locationButton.textContent = "Ir para a minha localização";
@@ -79,7 +63,7 @@
                 var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
 
                 for (var i = 0; i < locais.length; i++) {
-                    const marker1 = new google.maps.Marker({
+                    var marker1 = new google.maps.Marker({
                         position: { lat: parseFloat(locais[i].latitude), lng: parseFloat(locais[i].longitude) }, map, title: (i + ""), icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
                     });
 

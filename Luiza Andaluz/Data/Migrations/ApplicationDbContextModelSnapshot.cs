@@ -99,6 +99,19 @@ namespace Luiza_Andaluz.Data.Migrations
                     b.ToTable("Local");
                 });
 
+            modelBuilder.Entity("LuizaAndaluz.Models.UtilizadoresEspera", b =>
+                {
+                    b.Property<string>("ID")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("UtilizadoresEspera");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")

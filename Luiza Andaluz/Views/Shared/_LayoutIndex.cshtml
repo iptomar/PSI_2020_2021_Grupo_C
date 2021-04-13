@@ -66,17 +66,23 @@
                         </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="">   Todas as Histórias   </a>
-                            </li>
+                            @if (User.IsInRole("admin") || User.IsInRole("irma"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="">Todas as Histórias</a>
+                                </li>
+                            }
                             @if (User.IsInRole("admin"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="PorValidar">   Histórias Por Validar   </a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="PorValidar">Histórias Por Validar</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="UtilizadoresEsperas" asp-action="">Pedidos de Admissão</a>
                                 </li>
                             }
-                        }
-                    </ul>
+                         }
+                        </ul>
                 </div>
             </div>
         </nav>

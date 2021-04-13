@@ -12,6 +12,7 @@ namespace Luiza_Andaluz.Data
         public DbSet<Conteudo> Conteudo { get; set; }
         public DbSet<Historia> Historias { get; set; }
         public DbSet<Local> Local { get; set; }
+        public DbSet<UtilizadoresEspera> UtilizadoresEspera { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -28,6 +28,7 @@ namespace Luiza_Andaluz.Controllers
 
         // GET: Historias
         [Authorize]
+        [Authorize(Roles = "admin, irma")]
         public async Task<IActionResult> Index(){
             var applicationDbContext = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true);
             return View(await applicationDbContext.ToListAsync());
@@ -46,12 +47,14 @@ namespace Luiza_Andaluz.Controllers
             List<NewHistoria> historias = null;
             try{
                 local = _context.Local.Where(l => l.Latitude == lat && l.Longitude == lng).FirstOrDefault();
-                historias = _context.Historias.Where(h => h.LocalFK == local.ID).Select(x => new NewHistoria
+                historias = _context.Historias.Include(h => h.Conteudo).Where(h => h.LocalFK == local.ID).Select(x => new NewHistoria
                 {
                     ID = x.ID,
                     Descricao = x.Descricao,
                     Titulo = x.Titulo,
                     Data = x.Data.ToString("dd-MM-yyyy"),
+                    Conteudo = x.Conteudo.ToArray()[0].Ficheiro
+
                 }).ToList();
             }
             catch (Exception){
@@ -295,7 +298,9 @@ namespace Luiza_Andaluz.Controllers
             var local = await _context.Local.FirstOrDefaultAsync(l => l.ID == historia.LocalFK);
             var conteudo =  _context.Conteudo.Where(l => l.HistoriaFK == historia.ID).ToList();
             _context.Historias.Remove(historia);
-            if(local.Historia.Count == 1) _context.Local.Remove(local);
+            if (!(_context.Historias.Any(h => h.LocalFK == local.ID))){
+                _context.Local.Remove(local);
+            }
             for(var i = 0; i < conteudo.Count; i++){
                 System.IO.File.Delete(Path.Combine(_caminho.WebRootPath, "Ficheiros", conteudo[i].Ficheiro));
                 _context.Conteudo.Remove(conteudo[i]);
@@ -316,6 +321,7 @@ namespace Luiza_Andaluz.Controllers
         public string Descricao;
         public string Titulo;
         public string Data;
+        public string Conteudo;
     }
 
 }
