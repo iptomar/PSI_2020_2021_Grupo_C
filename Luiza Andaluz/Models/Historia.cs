@@ -11,17 +11,17 @@ namespace LuizaAndaluz.Models
     {
         [Key]
         public String ID { get; set; }
-
+        [Required]
         public String Titulo { get; set; }
-
+        [Required]
         public String Descricao { get; set; }
 
         public bool Estado { get; set; }
-
+        [Required]
         public String Nome { get; set; }
 
         public int Idade { get; set; }
-
+        [Required]
         public String Email { get; set; }
 
         public DateTime Data { get; set; }

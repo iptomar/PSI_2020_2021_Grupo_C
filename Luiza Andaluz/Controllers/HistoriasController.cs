@@ -53,7 +53,7 @@ namespace Luiza_Andaluz.Controllers
                     Descricao = x.Descricao,
                     Titulo = x.Titulo,
                     Data = x.Data.ToString("dd-MM-yyyy"),
-                    Conteudo = x.Conteudo.ToArray()[0].Ficheiro
+                    Conteudo = x.Conteudo != null ? x.Conteudo.ToArray()[0].Ficheiro : "nada"
 
                 }).ToList();
             }
@@ -111,29 +111,21 @@ namespace Luiza_Andaluz.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Titulo,Descricao,Nome,Idade,Email")] Historia historia, List<IFormFile> fich, String lat, String lng)
-        {
-            if (lat.Equals("0") || lng.Equals("0"))
-            {
+        public async Task<IActionResult> Create([Bind("ID,Titulo,Descricao,Nome,Idade,Email")] Historia historia, List<IFormFile> fich, String lat, String lng){
+            if (lat.Equals("0") || lng.Equals("0")){
                 return View();
             }
 
             Local local = null;
-            if (_context.Local.Any(l => l.Latitude == lat && l.Longitude == lng))
-            {
+            if (_context.Local.Any(l => l.Latitude == lat && l.Longitude == lng)){
                 local = await _context.Local.FirstOrDefaultAsync(l => l.Latitude == lat && l.Longitude == lng);
-
             }
-            else
-            {
-                local = new Local
-                {
+            else{
+                local = new Local{
                     ID = Guid.NewGuid().ToString(),
                     Latitude = lat,
                     Longitude = lng
                 };
-                _context.Add(local);
-                await _context.SaveChangesAsync();
             }
             var user = await _userManager.GetUserAsync(User);
             historia.Estado = false;
@@ -144,26 +136,29 @@ namespace Luiza_Andaluz.Controllers
             historia.Data = DateTime.Now;
             historia.Validador = null;
 
-            _context.Historias.Add(historia);
-            await _context.SaveChangesAsync();
+            try{
+                _context.Local.Add(local);
+                await _context.SaveChangesAsync();
+                _context.Historias.Add(historia);
+                await _context.SaveChangesAsync();
+            }
+            catch(Exception ex){
+                return View();
+            }
 
-            foreach (IFormFile ficheiro in fich)
-            {
+            foreach (IFormFile ficheiro in fich){
                 string caminhoCompleto = "";
                 bool haFicheiro = false;
 
-                if (ficheiro == null)
-                {
+                if (ficheiro == null){
                     return View();
                 }
                 string extensao = Path.GetExtension(ficheiro.FileName).ToLower();
                 string nome = Guid.NewGuid().ToString() + extensao;
                 caminhoCompleto = Path.Combine(_caminho.WebRootPath, "Ficheiros", nome);
                 haFicheiro = true;
-                try
-                {
-                    if (haFicheiro)
-                    {
+                try{
+                    if (haFicheiro){
                         Conteudo cont = new Conteudo
                         {
                             ID = Guid.NewGuid().ToString(),
@@ -179,12 +174,11 @@ namespace Luiza_Andaluz.Controllers
                         await _context.SaveChangesAsync();
                     }
                 }
-                catch (Exception)
-                {
+                catch (Exception){
                     return View();
                 }
             }
-            return Redirect("~/home"); ;
+            return Redirect("~/home");
 
         }
 
@@ -306,7 +300,7 @@ namespace Luiza_Andaluz.Controllers
                 _context.Conteudo.Remove(conteudo[i]);
             }
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Redirect("~/home"); ;
         }
 
         private bool HistoriaExists(string id)
