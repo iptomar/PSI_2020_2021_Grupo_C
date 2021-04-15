@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace LuizaAndaluz.Models
 {
+    /// <summary>
+    /// Modelo das historias de luiza andaluz
+    /// </summary>
     public class Historia
     {
         [Key]
@@ -27,7 +30,9 @@ namespace LuizaAndaluz.Models
         public DateTime Data { get; set; }
 
         public String Validador { get; set; }
-
+        /// <summary>
+        /// ligação à tabela Local
+        /// </summary>
         [Required]
         [ForeignKey(nameof(Local))]
         public String LocalFK { get; set; }
