@@ -22,6 +22,10 @@ namespace Luiza_Andaluz.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// retorna a pagina de Index
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true);
@@ -29,11 +33,19 @@ namespace Luiza_Andaluz.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>retorna a pagina de privacidade</returns>
         public IActionResult Privacy()
         {
             return View();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>retorna uma pagina de erro</returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

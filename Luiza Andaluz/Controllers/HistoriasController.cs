@@ -15,17 +15,31 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Luiza_Andaluz.Controllers
 {
+/// <summary>
+/// Classe referente as historias de Luiza Andaluz
+/// Contem: ligação a DB, Anbiente web e controlador de administrador de Utilizadores
+/// </summary>
     public class HistoriasController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _caminho;
         private readonly UserManager<IdentityUser> _userManager;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context">contexto da Base de Dados</param>
+        /// <param name="caminho">Ambiente onde a aplicação está a correr</param>
+        /// <param name="userManager">Administração de Utilizadores</param>
         public HistoriasController(ApplicationDbContext context, IWebHostEnvironment caminho, UserManager<IdentityUser> userManager){
             _context = context;
             _caminho = caminho;
             _userManager = userManager;
         }
-
+        /// <summary>
+        /// se o utilizador tem permições de Admin ou de "irmã"
+        /// Acede à base de dados e retira todas as historias de luiza andaluz
+        /// </summary>
+        /// <returns>View com as historias de Luiza Andaluz</returns>
         // GET: Historias
         [Authorize]
         [Authorize(Roles = "admin, irma")]
@@ -34,6 +48,11 @@ namespace Luiza_Andaluz.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        /// <summary>
+        /// se o utilizador tem permições de admin
+        /// retorna da DB as historias por validar de Luiza Andaluz
+        /// </summary>
+        /// <returns>view de validação</returns>
         [Authorize]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> PorValidar(){
@@ -41,6 +60,12 @@ namespace Luiza_Andaluz.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        /// <summary>
+        /// acede á BD e retira as historias de luiza andaluz com as coordenadas passadas
+        /// </summary>
+        /// <param name="lat">Latitude do local da historia</param>
+        /// <param name="lng">longitude do local da historia</param>
+        /// <returns></returns>
         // GET: Historias
         public IActionResult GetHistoriasByLocation(string lat, string lng){
             Local local = null;
@@ -64,6 +89,11 @@ namespace Luiza_Andaluz.Controllers
             return Ok(historias);
         }
 
+        /// <summary>
+        /// Acede aos detalhes de uma historia de Luiza Andaluz
+        /// </summary>
+        /// <param name="id">Parametro ID da Historia</param>
+        /// <returns>view de Detalhes da historia</returns>
         // GET: Historias/Details/5
         public async Task<IActionResult> Details(string id){
             if (id == null){
@@ -85,6 +115,10 @@ namespace Luiza_Andaluz.Controllers
             return View(historia);
         }
 
+        /// <summary>
+        /// metodo que retorna a pagina de criaçao de uma historia
+        /// </summary>
+        /// <returns>View de Criação de uma historia</returns>
         // GET: Historias/Create
         public IActionResult Create()
         {
@@ -92,6 +126,13 @@ namespace Luiza_Andaluz.Controllers
             return View();
         }
 
+        /// <summary>
+        /// se o utilizador tem permissões de  admin
+        /// pesquisa na DB por a historia de luiza andaluz e marca a historia como validada
+        /// permitindo que seja vista por todos os utilizadores
+        /// </summary>
+        /// <param name="id">ID da Historia </param>
+        /// <returns>view de detalhes</returns>
         [HttpPost, ActionName("Validar")]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -106,6 +147,14 @@ namespace Luiza_Andaluz.Controllers
             return Redirect("Details/" + id);
         }
 
+        /// <summary>
+        /// metodo que guarda uma historia de luiza andaluz
+        /// </summary>
+        /// <param name="historia">Objeto com os parametros da Historia</param>
+        /// <param name="fich">Ficheiros relevantes à historia</param>
+        /// <param name="lat">Latitude do local da historia</param>
+        /// <param name="lng">Longitude do local da historia</param>
+        /// <returns>view da pagina home</returns>
         // POST: Historias/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -188,6 +237,11 @@ namespace Luiza_Andaluz.Controllers
 
         }
 
+        /// <summary>
+        /// Metodo que retorna a pagina de edição de uma historia
+        /// </summary>
+        /// <param name="id">ID da Historia de Luiza Andaluz</param>
+        /// <returns>view da pagina Edit</returns>
         // GET: Historias/Edit/5
         [Authorize]
         [Authorize(Roles = "admin")]
@@ -210,6 +264,14 @@ namespace Luiza_Andaluz.Controllers
             return View(historia);
         }
 
+        /// <summary>
+        /// Guarda as Alterações feitas na pagina edit
+        /// </summary>
+        /// <param name="id">ID da Historia</param>
+        /// <param name="historia">Objeto com os parametros da Historia</param>
+        /// <param name="lat">Latitude do local da historia</param>
+        /// <param name="lng">longitude do local da historia</param>
+        /// <returns>View dos Detalhes da Historia</returns>
         // POST: Historias/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -266,6 +328,12 @@ namespace Luiza_Andaluz.Controllers
 
         }
 
+        /// <summary>
+        /// Se O Utilizador tem permissões de admin
+        /// retorna a pagina de delete
+        /// </summary>
+        /// <param name="id">ID da historia</param>
+        /// <returns>View da pagina de delete</returns>
         // GET: Historias/Delete/5
         [Authorize]
         [Authorize(Roles = "admin")]
@@ -287,6 +355,12 @@ namespace Luiza_Andaluz.Controllers
             return View(historia);
         }
 
+        /// <summary>
+        /// se o utilizdor tem permissões de admin
+        /// apaga uma historia da Base de dados
+        /// </summary>
+        /// <param name="id">ID da historia</param>
+        /// <returns>view das historias</returns>
         // POST: Historias/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -315,6 +389,9 @@ namespace Luiza_Andaluz.Controllers
         }
     }
 
+    /// <summary>
+    /// classe interna de uma nova histora
+    /// </summary>
     public class NewHistoria
     {
         public string ID;
