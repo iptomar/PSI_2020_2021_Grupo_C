@@ -72,14 +72,15 @@ namespace Luiza_Andaluz.Controllers
             List<NewHistoria> historias = null;
             try{
                 local = _context.Local.Where(l => l.Latitude == lat && l.Longitude == lng).FirstOrDefault();
-                historias = _context.Historias.Include(h => h.Conteudo).Where(h => h.LocalFK == local.ID).Select(x => new NewHistoria
+                var ahistorias = _context.Historias.Include(h => h.Conteudo).Where(h => h.LocalFK == local.ID);
+
+                historias = ahistorias.Select(x => new NewHistoria
                 {
                     ID = x.ID,
                     Descricao = x.Descricao,
                     Titulo = x.Titulo,
                     Data = x.Data.ToString("dd-MM-yyyy"),
-                    Conteudo = x.Conteudo != null ? x.Conteudo.ToArray()[0].Ficheiro : "nada"
-
+                    Conteudo = x.Conteudo.Count != 0 ? x.Conteudo.ToList()[0].Ficheiro : "nada"
                 }).ToList();
             }
             catch (Exception){
@@ -300,11 +301,13 @@ namespace Luiza_Andaluz.Controllers
 
             try
             {
+
                 historia.LocalFK = local.ID;
                 historia.Local = local;
+
                 _context.Update(historia);
                 await _context.SaveChangesAsync();
-                
+
                 return RedirectToAction(nameof(Index));
             }
             catch (DbUpdateConcurrencyException)

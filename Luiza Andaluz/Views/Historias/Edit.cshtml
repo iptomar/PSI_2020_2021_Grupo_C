@@ -122,8 +122,8 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-validation-for="lat" type="hidden" id="lat" name="lat" value="0" />
-                <input asp-validation-for="lng" type="hidden" id="lng" name="lng" value="0" />
+                <input asp-validation-for="lat" type="hidden" id="lat" name="lat" value="@ViewBag.Latitude" />
+                <input asp-validation-for="lng" type="hidden" id="lng" name="lng" value="@ViewBag.Longitude" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

@@ -82,7 +82,6 @@
 
                         response.forEach(element => {
                             console.log(element);
-
                             s += "<div class='card d-lg-block'>";
                             if (element.conteudo.endsWith('png') || element.conteudo.endsWith("jpg") || element.conteudo.endsWith("gif") || element.conteudo.endsWith("jfif")) {
                                 s += "<img src='/Ficheiros/" + element.conteudo + "' class='card-img-top' alt='/Ficheiros/" + element.conteudo + "'>";
