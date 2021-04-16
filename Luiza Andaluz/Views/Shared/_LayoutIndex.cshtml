@@ -1,6 +1,8 @@
 ﻿@using Microsoft.AspNetCore.Identity
+
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,27 +15,27 @@
     <link rel="stylesheet" href="~/css/sidebar.css" />
 
     <!-- Pires Layout -->
-        <meta charset="utf-8">
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-        <meta content="" name="description">
-        <meta content="" name="keywords">
+    <meta content="" name="description">
+    <meta content="" name="keywords">
 
 
 
-        <!-- Google Fonts -->
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,700,700i|Raleway:300,400,500,700,800" rel="stylesheet">
 
-        <!-- Vendor CSS Files -->
-        <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-        <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
-        <link href="assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-        <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-        <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
-        <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+    <link href="assets/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
 
-        <!-- Template Main CSS File -->
-        <link href="assets/css/style.css" rel="stylesheet">
+    <!-- Template Main CSS File -->
+    <link href="assets/css/style.css" rel="stylesheet">
     <!-- Pires Layout -->
 
     <style>
@@ -45,6 +47,10 @@
         #mapSecundario {
             height: 400px;
             width: 100%
+        }
+
+        .my-class {
+            color: #000000;
         }
     </style>
 </head>
@@ -59,10 +65,12 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
+                    <!--<partial name="_LanguagePartial" />-->
                     <ul class="navbar-nav flex-grow-1">
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="Create">Contar a minha Historia</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="Create" asp-route-culture="pt">Contar a minha Historia</a>
+
                         </li>
                         @if (SignInManager.IsSignedIn(User))
                         {
@@ -81,8 +89,8 @@
                                     <a class="nav-link text-dark" asp-area="" asp-controller="UtilizadoresEsperas" asp-action="">Pedidos de Admissão</a>
                                 </li>
                             }
-                         }
-                        </ul>
+                        }
+                    </ul>
                 </div>
             </div>
         </nav>
