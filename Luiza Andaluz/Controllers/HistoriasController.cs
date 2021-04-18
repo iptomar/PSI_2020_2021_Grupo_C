@@ -165,7 +165,7 @@ namespace Luiza_Andaluz.Controllers
             if (lat.Equals("0") || lng.Equals("0")){
                 return View();
             }
-
+            bool locali = false;
             Local local = null;
             if (_context.Local.Any(l => l.Latitude == lat && l.Longitude == lng)){
                 local = await _context.Local.FirstOrDefaultAsync(l => l.Latitude == lat && l.Longitude == lng);
@@ -176,6 +176,7 @@ namespace Luiza_Andaluz.Controllers
                     Latitude = lat,
                     Longitude = lng
                 };
+                locali = true;
             }
             var user = await _userManager.GetUserAsync(User);
             historia.Estado = false;
@@ -187,8 +188,10 @@ namespace Luiza_Andaluz.Controllers
             historia.Validador = null;
 
             try{
-                _context.Local.Add(local);
-                await _context.SaveChangesAsync();
+                if (locali){
+                    _context.Local.Add(local);
+                    await _context.SaveChangesAsync();
+                }
                 _context.Historias.Add(historia);
                 await _context.SaveChangesAsync();
             }
