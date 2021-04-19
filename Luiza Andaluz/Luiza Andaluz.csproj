@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Testes\" />
     <Folder Include="wwwroot\Ficheiros\" />
   </ItemGroup>
 
