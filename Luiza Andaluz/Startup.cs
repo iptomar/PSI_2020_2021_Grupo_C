@@ -44,18 +44,25 @@ namespace Luiza_Andaluz
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             );
             services.AddControllersWithViews();
+            //services.AddHttpContextAccessor();
             services.AddLocalization(opt => { opt.ResourcesPath = "Resources"; });
+            services.AddMvc().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
             services.Configure<RequestLocalizationOptions>(options => {
                 List<CultureInfo> supportedCultures = new List<CultureInfo>
                 {
                     new CultureInfo("pt-PT"),
                     new CultureInfo("en-GB")
                 };
+                //options.DefaultRequestCulture = new RequestCulture("pt-PT");
                 options.DefaultRequestCulture = new RequestCulture("pt-PT");
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
+                /*var supportedCultures = new[] { "pt-PT", "en-GB" };
+                options.SetDefaultCulture(supportedCultures[0])
+                    .AddSupportedCultures(supportedCultures)
+                    .AddSupportedUICultures(supportedCultures);*/
             });
-            services.AddMvc().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
+            //services.AddMvc().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -81,7 +88,7 @@ namespace Luiza_Andaluz
             app.UseAuthentication();
             app.UseAuthorization();
 
-            /*var supportedCultures = new[] { "pt", "en", "es" };
+            /*var supportedCultures = new[] { "pt-PT", "en-GB" };
             var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(supportedCultures[0])
                 .AddSupportedCultures(supportedCultures)
                 .AddSupportedUICultures(supportedCultures);
