@@ -1,14 +1,14 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
+﻿
 @model IEnumerable<LuizaAndaluz.Models.Historia>
 @inject IViewLocalizer Localizer
 @{
-    ViewData["Title"] = Localizer["GreetingMessage"];
+    ViewData["Title"] = ViewData["Title"];
 }
 
 
 <!-- ======= Hero Section ======= -->
 <h1>@ViewData["Title"]</h1>
-<h1>@Localizer["GreetingMessage"]</h1>
+<h1>@Localizer["GreetingMessage"].Value</h1>
 <section id="hero">
     <div class="hero-container">
         <div class="wow fadeIn">

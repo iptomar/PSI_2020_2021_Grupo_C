@@ -1,12 +1,13 @@
 ﻿using Luiza_Andaluz.Data;
 using Luiza_Andaluz.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Localization;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Localization;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,12 +21,14 @@ namespace Luiza_Andaluz.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILogger<HomeController> _logger;
         private readonly IStringLocalizer<HomeController> _stringLocalizer;
+        private readonly IHtmlLocalizer<HomeController> _localizer;
 
-        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger, IStringLocalizer<HomeController> stringLocalizer)
+        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger, IStringLocalizer<HomeController> stringLocalizer, IHtmlLocalizer<HomeController> localizer)
         {
             _context = context;
             _logger = logger;
             _stringLocalizer = stringLocalizer;
+            _localizer = localizer;
         }
 
         public async Task<IActionResult> Index()
@@ -50,8 +53,7 @@ namespace Luiza_Andaluz.Controllers
 
         public IActionResult Privacy()
         {
-            string message = _stringLocalizer["GreetingMessage"].Value;
-            ViewData["Title"] = message;
+
             return View();
         }
 
