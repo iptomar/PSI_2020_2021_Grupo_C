@@ -40,6 +40,7 @@ namespace LuizaAndaluz.Models
 
 
         [Required(ErrorMessage = "O Email é de preenchimento obrigatório.")]
+        [EmailAddress]
         public String Email { get; set; }
 
 
