@@ -39,93 +39,98 @@
         </div>
         <div class="container about-container wow fadeInUp">
             <div class="mx-5">
-                <div id="mySidenav" class="sidenav px-2"></div>
-
-                <div id="mapPrincipal"></div>
+                <div id="mySidenav" class="sidenav px-2" style="z-index:10"></div>
+                <div id="mapPrincipal" style="z-index:0"></div>
             </div>
-
             <script>
-    function initMap() {
-        var options = {
-            zoom: 4,
-            center: { lat: 39.6019900, lng: -8.4092400 }
-        }
+                var map = L.map('mapPrincipal').setView([39.6019900, -8.4092400], 4);
 
-        var map = new google.maps.Map(document.getElementById('mapPrincipal'), options);
-        var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(map);
 
-         for (var i = 0; i < locais.length; i++) {
-             const marker = new google.maps.Marker({
-                 position: { lat: parseFloat(locais[i].latitude), lng: parseFloat(locais[i].longitude) }, map, title: (i + ""),
-             });
+                var greenIcon = L.icon({
+                    iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+                    shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
 
-            marker.addListener("click", () => {
-                openNav();
-                lat = parseFloat(marker.getPosition().lat());
-                lng = parseFloat(marker.getPosition().lng());
-
-                $.ajax({
-                    type: "GET",
-                    url: `/Historias/GetHistoriasByLocation?lat=${lat}&lng=${lng}`,
-                    contentType: "application/json",
-                    dataType: "json",
-                    success: function (response) {
-                        //populate the form elements with the returned data
-                        var s="<div class='row pr-1'>"+
-                            "<div class='col-10 align-self-center'><h3>Histórias</h3></div>" +
-                            "<div class='col-2'>"+
-                                "<button type='button' class='close float-right' onclick='closeNav()' aria-label='Close'>"+
-                                    "<span aria-hidden='true'>&times;</span>"+
-                                "</button>" +
-                            "</div>"+
-                        "</div>";
-
-                        response.forEach(element => {
-                            console.log(element);
-                            s += "<div class='card d-lg-block'>";
-                            if (element.conteudo.endsWith('png') || element.conteudo.endsWith("jpg") || element.conteudo.endsWith("gif") || element.conteudo.endsWith("jfif")) {
-                                s += "<img src='/Ficheiros/" + element.conteudo + "' class='card-img-top' alt='/Ficheiros/" + element.conteudo + "'>";
-                            }
-                            else if (element.conteudo.endsWith('mp4') || element.conteudo.endsWith("mov")) {
-                                s += "<iframe class='card-img-top' src='/Ficheiros/" + element.conteudo + "' allowfullscreen></iframe>"
-                            }
-                            else {
-                                s += "<img src='/Ficheiros/exemplo.jfif' class='card-img-top' alt='/Ficheiros/exemplo.jfif'>";
-                            }
-                            s += "<div class='card-body'>" +
-                                "<a href='historias/details/" + element.id + "'>" +
-                                "<h5 class='card-title'>" + element.titulo + "</h5>" +
-                                "</a>" +
-                                "<p class='card-text'>" + element.descricao + "</p>" +
-                                "<p class='card-text small'>" + element.data + "</p>" +
-                                "</div>" +
-                                "</div>";
-                        });
-
-                        document.getElementById("mySidenav").innerHTML = "";
-                        document.getElementById("mySidenav").innerHTML += s;
-
-                    },
-                    failure: function (response) {
-                        //handle the error
-                    }
+                    iconSize: [38, 95], // size of the icon
+                    shadowSize: [50, 64], // size of the shadow
+                    iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+                    shadowAnchor: [4, 62],  // the same for the shadow
+                    popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
                 });
-            });
-        }
-    }
 
-    function openNav() {
-        document.getElementById("mySidenav").style.display = "block";
-    }
+                var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
+                for (var i = 0; i < locais.length; i++) {
+                    const marker = L.marker([parseFloat(locais[i].latitude), parseFloat(locais[i].longitude)], { icon: greenIcon}).addTo(map);
 
-    function closeNav() {
-        document.getElementById("mySidenav").style.display = "none";
-    }
+                    marker.on("click", (e) => {
+                        openNav();
+                        lat = parseFloat(e.latlng.lat);
+                        lng = parseFloat(e.latlng.lng);
+
+                        $.ajax({
+                            type: "GET",
+                            url: `/Historias/GetHistoriasByLocation?lat=${lat}&lng=${lng}`,
+                            contentType: "application/json",
+                            dataType: "json",
+                            success: function (response) {
+                                //populate the form elements with the returned data
+                                var s="<div class='row pr-1'>"+
+                                    "<div class='col-10 align-self-center'><h3>Histórias</h3></div>" +
+                                    "<div class='col-2'>"+
+                                        "<button type='button' class='close float-right' onclick='closeNav()' aria-label='Close'>"+
+                                            "<span aria-hidden='true'>&times;</span>"+
+                                        "</button>" +
+                                    "</div>"+
+                                "</div>";
+
+                                response.forEach(element => {
+                                    console.log(element);
+                                    s += "<div class='card d-lg-block'>";
+                                    if (element.conteudo.endsWith('png') || element.conteudo.endsWith("jpg") || element.conteudo.endsWith("gif") || element.conteudo.endsWith("jfif")) {
+                                        s += "<img src='/Ficheiros/" + element.conteudo + "' class='card-img-top' alt='/Ficheiros/" + element.conteudo + "'>";
+                                    }
+                                    else if (element.conteudo.endsWith('mp4') || element.conteudo.endsWith("mov")) {
+                                        s += "<iframe class='card-img-top' src='/Ficheiros/" + element.conteudo + "' allowfullscreen></iframe>"
+                                    }
+                                    else {
+                                        s += "<img src='/Ficheiros/exemplo.jfif' class='card-img-top' alt='/Ficheiros/exemplo.jfif'>";
+                                    }
+                                    s += "<div class='card-body'>" +
+                                        "<a href='historias/details/" + element.id + "'>" +
+                                        "<h5 class='card-title'>" + element.titulo + "</h5>" +
+                                        "</a>" +
+                                        "<p class='card-text'>" + element.descricao + "</p>" +
+                                        "<p class='card-text small'>" + element.data + "</p>" +
+                                        "</div>" +
+                                        "</div>";
+                                });
+
+                                document.getElementById("mySidenav").innerHTML = "";
+                                document.getElementById("mySidenav").innerHTML += s;
+
+                            },
+                            failure: function (response) {
+                                //handle the error
+                            }
+                        });
+                    });
+                }
+
+
+                function openNav() {
+                    document.getElementById("mySidenav").style.display = "block";
+                }
+
+                function closeNav() {
+                    document.getElementById("mySidenav").style.display = "none";
+                }
+
             </script>
-
-            <script async defer
-                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
-            </script>
+            @*<script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
+            </script>*@
         </div>
     </section><!-- End About Section -->
 

@@ -13,81 +13,95 @@
 <hr />
 <div class="row">
     <div class="col-md-12">
-        <script>
-                function initMap() {
-                    var options = {
-                        zoom: 4,
-                        center: { lat: 39.6019900, lng: -8.4092400 }
-                    }
-
-                    var map = new google.maps.Map(document.getElementById('mapSecundario'), options);
-
-                    const locationButton = document.createElement("button");
-                    locationButton.textContent = "Ir para a minha localização";
-                    locationButton.classList.add("custom-map-control-button");
-
-                    map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-
-                    locationButton.addEventListener("click", () => {
-                        if (navigator.geolocation) {
-                            navigator.geolocation.getCurrentPosition(
-                                (position) => {
-                                    const pos = {
-                                        lat: position.coords.latitude,
-                                        lng: position.coords.longitude,
-                                    };
-                                    map.setCenter(pos);
-                                },
-                                () => {
-                                    alert("Não foi possivel centrar o mapa na sua localização");
-                                }
-                            );
-                        } else {
-                            alert("Não foi possivel centrar o mapa na sua localização");
-                        }
-                    });
-
-                    var marker = new google.maps.Marker({
-                        position: {lat:parseFloat(@ViewBag.Latitude), lng: parseFloat(@ViewBag.Longitude)}, map, title: "Ponto",
-                    });;
-
-                    map.addListener("click", (event) => {
-                        if (marker != null) marker.setMap(null);
-                        marker = new google.maps.Marker({
-                            position: event.latLng, map, title: "Ponto",
-                        });
-                        document.getElementById('lat').value = event.latLng.lat();
-                        document.getElementById('lng').value = event.latLng.lng();
-                        document.getElementById('aviso').innerHTML = "Localização Marcada";
-                    });
-
-                    var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
-
-                    for (var i = 0; i < locais.length; i++) {
-                        const marker1 = new google.maps.Marker({
-                            position: { lat: parseFloat(locais[i].latitude), lng: parseFloat(locais[i].longitude) }, map, title: (i + ""), icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                        });
-
-                        marker1.addListener("click", () => {
-                            if (marker != null) {
-                                marker.setMap(null);
-                                marker = null;
-                            }
-                            document.getElementById('lat').value = marker1.position.lat();
-                            document.getElementById('lng').value = marker1.position.lng();
-                            document.getElementById('aviso').innerHTML = "Localização Marcada";
-                        });
-                    }
-                }
-        </script>
         <div>
             <label class="control-label">Mapa</label>
             <div id="mapSecundario"></div>
-            <script async defer
-                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
-            </script>
             <h4 id="aviso"></h4>
         </div>
+        <script>
+            var map = L.map('mapSecundario').setView([39.6019900, -8.4092400], 4);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            @*
+            const locationButton = document.createElement("button");
+            locationButton.textContent = "Ir para a minha localização";
+            locationButton.classList.add("custom-map-control-button");
+
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+
+            locationButton.addEventListener("click", () => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                            };
+                            map.setCenter(pos);
+                        },
+                        () => {
+                            alert("Não foi possivel centrar o mapa na sua localização");
+                        }
+                    );
+                } else {
+                    alert("Não foi possivel centrar o mapa na sua localização");
+                }
+            });
+            *@
+
+            var greenIcon = L.icon({
+                iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+                shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+
+                iconSize: [38, 95], // size of the icon
+                shadowSize: [50, 64], // size of the shadow
+                iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+                shadowAnchor: [4, 62],  // the same for the shadow
+                popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+            });
+
+            var redIcon = L.icon({
+                iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-red.png',
+                shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+
+                iconSize: [38, 95], // size of the icon
+                shadowSize: [50, 64], // size of the shadow
+                iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+                shadowAnchor: [4, 62],  // the same for the shadow
+                popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+            });
+
+            var marker = L.marker([parseFloat(@ViewBag.Latitude), parseFloat(@ViewBag.Longitude)], { icon: redIcon }).addTo(map);
+
+            map.on("click", (event) => {
+                if (marker != null) {
+                    map.removeLayer(marker);
+                    marker = null;
+                }
+                marker = L.marker([event.latlng.lat, event.latlng.lng], { icon: redIcon }).addTo(map);
+                document.getElementById('lat').value = event.latlng.lat;
+                document.getElementById('lng').value = event.latlng.lng;
+                document.getElementById('aviso').innerHTML = "Localização Marcada";
+            });
+
+            var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
+            for (var i = 0; i < locais.length; i++) {
+                local = [parseFloat(locais[i].latitude), parseFloat(locais[i].longitude)];
+                const marker1 = L.marker(local, { icon: greenIcon }).addTo(map);
+                marker1.on("click", () => {
+                    if (marker != null) {
+                        map.removeLayer(marker);
+                        marker = null;
+                    }
+                    document.getElementById('lat').value = parseFloat(local[0]);
+                    document.getElementById('lng').value = parseFloat(local[1]);
+                    document.getElementById('aviso').innerHTML = "Localização Marcada";
+                });
+            }
+        </script>
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="ID" />

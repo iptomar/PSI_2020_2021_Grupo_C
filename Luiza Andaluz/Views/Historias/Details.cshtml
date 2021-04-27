@@ -60,16 +60,13 @@
 }
 <br />
 <div>
-    @foreach (var item in Model.Conteudo)
-    {
+    @foreach (var item in Model.Conteudo){
 
-        if (item.Tipo.Contains("png") || item.Tipo.Contains("jpg") || item.Tipo.Contains("gif") || item.Tipo.Contains("jfif"))
-        {
+        if (item.Tipo.Contains("png") || item.Tipo.Contains("jpg") || item.Tipo.Contains("gif") || item.Tipo.Contains("jfif")){
             <img src="~/Ficheiros/@item.Ficheiro" class="rounded mx-auto d-block" style="max-width: 500px; max-height: 500px">
             <br />
         }
-        else if (item.Tipo.Contains("mp4") || item.Tipo.Contains("mov"))
-        {
+        else if (item.Tipo.Contains("mp4") || item.Tipo.Contains("mov")){
             <div class="embed-responsive embed-responsive-21by9">
                 <iframe class="embed-responsive-item" src="~/Ficheiros/@item.Ficheiro" allowfullscreen></iframe>
             </div>
@@ -81,16 +78,13 @@
 <div id="mapSecundario"></div>
 <script>
 function initMap() {
-    var options = {
-        zoom: 11,
-        center: { lat: parseFloat(@ViewBag.Latitude), lng: parseFloat(@ViewBag.Longitude) }
-    }
+    var map = L.map('mapSecundario').setView([parseFloat(@ViewBag.Latitude), parseFloat(@ViewBag.Longitude)], 11);
 
-    var map = new google.maps.Map(document.getElementById('mapSecundario'), options);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
-    new google.maps.Marker({
-        position: { lat: parseFloat(@ViewBag.Latitude), lng: parseFloat(@ViewBag.Longitude) }, map, title: ("Localização"),
-    });
+    L.marker([parseFloat(@ViewBag.Latitude), parseFloat(@ViewBag.Longitude)]).addTo(map);
 }
 </script>
 <script async defer
