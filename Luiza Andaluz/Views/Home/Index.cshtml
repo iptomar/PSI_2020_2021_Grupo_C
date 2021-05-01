@@ -3,6 +3,14 @@
     ViewData["Title"] = "Home Page";
 }
 
+@if (ViewBag.Valido != null)
+{
+    <script>
+        window.onload = function () {
+            alert("História criada com sucesso");
+        };
+    </script>
+}
 
 <!-- ======= Hero Section ======= -->
 <section id="hero">
@@ -16,7 +24,7 @@
 
             <div class="actions">
                 <a href="#about" class="btn-get-started">Histórias</a>
-               
+
             </div>
         </div>
     </div>
@@ -129,8 +137,8 @@
 
             </script>
             @*<script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
-            </script>*@
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
+                </script>*@
         </div>
     </section><!-- End About Section -->
 

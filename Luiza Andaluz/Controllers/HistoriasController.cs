@@ -163,6 +163,7 @@ namespace Luiza_Andaluz.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Titulo,Descricao,Nome,Idade,Email")] Historia historia, List<IFormFile> fich, String lat, String lng){
             if (lat.Equals("0") || lng.Equals("0")){
+                ViewBag.Erro = "Insira um Local";
                 return View();
             }
             bool locali = false;
@@ -196,6 +197,7 @@ namespace Luiza_Andaluz.Controllers
                 await _context.SaveChangesAsync();
             }
             catch(Exception ex){
+                
                 return View();
             }
 
@@ -231,8 +233,11 @@ namespace Luiza_Andaluz.Controllers
                     return View();
                 }
             }
-            return Redirect("~/home");
-
+            ViewBag.Valido = true;
+            return View("../Home/Index");
+            //return View();
+            //return Redirect("~/Home");
+            //return RedirectToAction("Index", "Home", ViewBag);
         }
 
         /// <summary>

@@ -5,9 +5,7 @@
 }
 
 
-    <h1>Create</h1>
-
-    <h4>Historia</h4>
+<h1>Contar a minha Historia</h1>
     <hr />
     <div class="row">
         <div class="col-md-12">
@@ -103,6 +101,14 @@
             }
             </script>
             <br />
+            <div id="success-message-container" class="alert alert-success text-center d-none">
+                <strong>Success!</strong> You have been subscribed successfully!
+            </div>
+
+            <div id="failure-message-container" class="alert alert-danger text-center d-none">
+                <strong>Failure!</strong> There is some problem with the service.Please try again.If the problem persists
+                please contract with system administrator!
+            </div>
             <form asp-action="Create" enctype="multipart/form-data" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
@@ -138,14 +144,21 @@
                 <input asp-validation-for="lat" type="hidden" id="lat" name="lat" value="0" />
                 <input asp-validation-for="lng" type="hidden" id="lng" name="lng" value="0" />
                 <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <input type="submit" value="Criar História" class="btn btn-primary" />
                 </div>
             </form>
+            @if (ViewBag.Erro != null){
+                <script>
+                    window.onload = function () {
+                        alert("@ViewBag.Erro");
+                    };
+                </script>
+            }
         </div>
     </div>
 
     <div>
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">Lista de Histórias</a>
     </div>
 
 
