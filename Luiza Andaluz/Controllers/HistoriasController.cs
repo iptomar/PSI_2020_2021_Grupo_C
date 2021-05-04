@@ -197,7 +197,6 @@ namespace Luiza_Andaluz.Controllers
                 await _context.SaveChangesAsync();
             }
             catch(Exception ex){
-                
                 return View();
             }
 
@@ -233,11 +232,7 @@ namespace Luiza_Andaluz.Controllers
                     return View();
                 }
             }
-            ViewBag.Valido = true;
-            return View("../Home/Index");
-            //return View();
-            //return Redirect("~/Home");
-            //return RedirectToAction("Index", "Home", ViewBag);
+            return View("HistoryCreated");
         }
 
         /// <summary>
@@ -248,13 +243,10 @@ namespace Luiza_Andaluz.Controllers
         // GET: Historias/Edit/5
         [Authorize]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
+        public async Task<IActionResult> Edit(string id){
+            if (id == null){
                 return NotFound();
             }
-
             var historia = await _context.Historias.FindAsync(id);
             if (historia == null)
             {

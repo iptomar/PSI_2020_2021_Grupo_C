@@ -47,7 +47,5 @@ namespace Luiza_Andaluz.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction("");
         }
-
-
     }
 }
