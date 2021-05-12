@@ -63,7 +63,6 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="Create">Contar a minha Historia</a>
                         </li>
@@ -72,16 +71,16 @@
                             @if (User.IsInRole("admin") || User.IsInRole("irma"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="">Todas as Histórias</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="">Histórias</a>
                                 </li>
                             }
                             @if (User.IsInRole("admin"))
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="PorValidar">Histórias Por Validar</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="PorValidar">Validar</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="UtilizadoresEsperas" asp-action="">Pedidos de Admissão</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="UtilizadoresEsperas" asp-action="">Admitir</a>
                                 </li>
                             }
                         }
