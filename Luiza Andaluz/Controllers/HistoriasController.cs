@@ -43,9 +43,31 @@ namespace Luiza_Andaluz.Controllers
         // GET: Historias
         [Authorize]
         [Authorize(Roles = "admin, irma")]
-        public async Task<IActionResult> Index(){
-            var applicationDbContext = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true);
-            return View(await applicationDbContext.ToListAsync());
+        public async Task<IActionResult> Index(String titulo, String descricao, DateTime? data)
+        {
+
+            if (titulo == null) titulo = "";
+            if (descricao == null) descricao = "";
+            if (data.HasValue)
+            {
+                var inputDate = data.Value.Date;
+                var inputDateNextDay = data.Value.Date.AddDays(1);
+                var applicationDbContext = _context.Historias
+                    .Where(h => h.Titulo.Contains(titulo))
+                    .Where(h => h.Descricao.Contains(descricao))
+                    .Where(h => h.Data >= inputDate && h.Data < inputDateNextDay)
+                    .Include(h => h.Local).Where(h => h.Estado == false);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else
+            {
+                var applicationDbContext = _context.Historias
+                    .Where(h => h.Titulo.Contains(titulo))
+                    .Where(h => h.Descricao.Contains(descricao))
+                    .Include(h => h.Local).Where(h => h.Estado == false);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            
         }
 
         /// <summary>

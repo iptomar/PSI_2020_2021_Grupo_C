@@ -2,9 +2,26 @@
 @{
     ViewData["Title"] = "Index";
 }
+<style>
+    body {
+        background-color: #dcdcdc;
+    }
+</style>
 
 <h1>Histórias</h1>
+<form method="post">
+    <div class="form-group row">
+        <label for="Titulo" class="col-form-label ml-3"><b>Titulo</b></label>
+        <input class="form-control col-2 mx-2" type="text" name="titulo">
 
+        <label for="Titulo" class="col-form-label"><b>Descrição</b></label>
+        <input class="form-control col-2 mx-2" type="text" name="descricao">
+
+        <label for="Titulo" class="col-form-label"><b>Data</b></label>
+        <input class="form-control col-2 mx-2" type="date" name="data">
+        <input class="btn-success btn" type="submit" value="Pesquisar" />
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -23,26 +40,28 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td style="word-break: break-all">
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Data)
-            </td>
-            <td>
-                @if (User.IsInRole("admin")){
-                    <a asp-action="Edit" asp-route-id="@item.ID">Alterar </a>
-                } 
-                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
-                @if (User.IsInRole("admin")){
-                <a asp-action="Delete" asp-route-id="@item.ID"> Apagar</a>
-                }
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Titulo)
                 </td>
-        </tr>
+                <td style="word-break: break-all">
+                    @Html.DisplayFor(modelItem => item.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Data)
+                </td>
+                <td>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a class="btn btn-warning mx-1" asp-action="Edit" asp-route-id="@item.ID">Alterar </a>
+                    }
+                    <a class="btn btn-info mx-1" asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
+                    @if (User.IsInRole("admin"))
+                    {
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID"> Apagar</a>
+                    }
+                </td>
+            </tr>
         }
     </tbody>
 </table>
