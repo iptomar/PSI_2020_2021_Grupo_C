@@ -1,4 +1,5 @@
-﻿using System;
+﻿//https://detectlanguage.com/documentation#intro
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace Luiza_Andaluz.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _caminho;
         private readonly UserManager<IdentityUser> _userManager;
+
         /// <summary>
         /// 
         /// </summary>

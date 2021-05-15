@@ -3,7 +3,7 @@
     ViewData["Title"] = "Home Page";
 }
 <!-- ======= Hero Section ======= -->
-<section id="hero">
+<section id="hero" onclick="closeNav()">
     <div class="hero-container">
         <div class="wow fadeIn">
             <div class="hero-logo">
@@ -23,7 +23,6 @@
 
 
 <main id="main">
-
     <!-- ======= About Section ======= -->
     <section id="about">
         <div class="container wow fadeInUp">
@@ -35,11 +34,10 @@
                 </div>
             </div>
         </div>
+
         <div class="container about-container wow fadeInUp">
-            <div class="mx-5">
-                <div id="mySidenav" class="sidenav px-2" style="z-index:10"></div>
-                <div id="mapPrincipal" style="z-index:0"></div>
-            </div>
+            <div id="mySidenav" class="sidenav px-2" style="z-index:10"></div>
+            <div id="mapPrincipal" class="mx-md-5" style="z-index:0"></div>
             <script>
                 var map = L.map('mapPrincipal').setView([39.6019900, -8.4092400], 4);
 
@@ -84,8 +82,7 @@
                                 "</div>";
 
                                 response.forEach(element => {
-                                    console.log(element);
-                                    s += "<div class='card d-lg-block'>";
+                                    s += "<div class='card d-lg-block my-1'>";
                                     if (element.conteudo.endsWith('png') || element.conteudo.endsWith("jpg") || element.conteudo.endsWith("gif") || element.conteudo.endsWith("jfif")) {
                                         s += "<img src='/Ficheiros/" + element.conteudo + "' class='card-img-top' alt='/Ficheiros/" + element.conteudo + "'>";
                                     }
