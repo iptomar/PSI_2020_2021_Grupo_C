@@ -3,142 +3,143 @@
 @{
     ViewData["Title"] = "Details";
 }
-<!--<style>
+<style>
     body {
         background-color: #dcdcdc;
     }
-</style>-->
+</style>
+<main id="main" style="background-color:#dcdcdc">
+
+    <div class="container">
+        <h2 class="d-flex">História: @Html.DisplayFor(model => model.Titulo)</h2>
+
+        <p class="d-flex">@Html.DisplayFor(model => model.Descricao)<p>
+            <hr />
 
 
-<div class="container">
-    <h2 class="d-flex">História: @Html.DisplayFor(model => model.Titulo)</h2>
-    
-    <p class="d-flex">@Html.DisplayFor(model => model.Descricao)<p>
-    <hr />
+            <br />
+            @if (Model.Conteudo.Count > 1)
+            {
+                <h4>Imagens: </h4>
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        @foreach (var item in Model.Conteudo.Select((value, i) => new { i, value }))
+                        {
+                            if (item.value.Tipo.Contains("png") || item.value.Tipo.Contains("jpg") || item.value.Tipo.Contains("gif") || item.value.Tipo.Contains("jfif"))
+                            {
+                                <div class="carousel-item@(item.i == 0 ? " active" : "")">
+                                    <img class="d-block w-100" src="~/Ficheiros/@item.value.Ficheiro">
+                                </div>
+                            }
+                            else if (item.value.Tipo.Contains("mp4") || item.value.Tipo.Contains("mov"))
+                            {
+                                <div class="carousel-item@(item.i == 0 ? " active" : "")">
+                                    <div class="embed-responsive embed-responsive-21by9">
+                                        <iframe class="d-block w-100 embed-responsive-item" src="~/Ficheiros/@item.value.Ficheiro" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <a class="carousel-control-prev  border-info" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon bg-info" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next border-info" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon bg-info" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            }
 
+            @if (Model.Conteudo.Count == 1)
+            {
 
-    <br />
-    @if (Model.Conteudo.Count > 1)
-    {
-        <h4>Imagens: </h4>
-        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                @foreach (var item in Model.Conteudo.Select((value, i) => new { i, value }))
+                foreach (var item in Model.Conteudo)
                 {
-                    if (item.value.Tipo.Contains("png") || item.value.Tipo.Contains("jpg") || item.value.Tipo.Contains("gif") || item.value.Tipo.Contains("jfif"))
+                    if (item.Tipo.Contains("png") || item.Tipo.Contains("jpg") || item.Tipo.Contains("gif") || item.Tipo.Contains("jfif"))
                     {
-                        <div class="carousel-item@(item.i == 0 ? " active" : "")">
-                            <img class="d-block w-100" style="max-height:500px;" src="~/Ficheiros/@item.value.Ficheiro">
-                        </div>
+                        <img src="~/Ficheiros/@item.Ficheiro" class="rounded mx-auto d-block w-50 p-3">
+                        <br />
                     }
-                    else if (item.value.Tipo.Contains("mp4") || item.value.Tipo.Contains("mov"))
+                    else if (item.Tipo.Contains("mp4") || item.Tipo.Contains("mov"))
                     {
-                        <div class="carousel-item@(item.i == 0 ? " active" : "")">
-                            <div class="embed-responsive embed-responsive-21by9">
-                                <iframe class="d-block w-100 embed-responsive-item" style="max-height:500px;" src="~/Ficheiros/@item.value.Ficheiro" allowfullscreen></iframe>
-                            </div>
+                        <div class="embed-responsive embed-responsive-21by9">
+                            <iframe class="embed-responsive-item" src="~/Ficheiros/@item.Ficheiro" allowfullscreen></iframe>
                         </div>
+                        <br />
                     }
                 }
-            </div>
-            <a class="carousel-control-prev  border-info" href="#carouselExampleControls" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon bg-info" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next border-info" href="#carouselExampleControls" role="button" data-slide="next">
-                <span class="carousel-control-next-icon bg-info" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
-    }
-
-    @if (Model.Conteudo.Count == 1)
-    {
-
-        foreach (var item in Model.Conteudo)
-        {
-            if (item.Tipo.Contains("png") || item.Tipo.Contains("jpg") || item.Tipo.Contains("gif") || item.Tipo.Contains("jfif"))
-            {
-                <img src="~/Ficheiros/@item.Ficheiro" class="rounded mx-auto d-block w-50 p-3">
-                <br />
             }
-            else if (item.Tipo.Contains("mp4") || item.Tipo.Contains("mov"))
-            {
-                <div class="embed-responsive embed-responsive-21by9">
-                    <iframe class="embed-responsive-item" src="~/Ficheiros/@item.Ficheiro" allowfullscreen></iframe>
-                </div>
-                <br />
-            }
-        }
-    }
-    <hr />
-    <br />
+            <hr />
+            <br />
 
-    <h4>Local:</h4>
-    <div id="mapSecundario"></div>
-    <br />
-    <div>
-        <div class="d-flex">
-            <h4>
-                <b>Autor: </b>
-                @Html.DisplayFor(model => model.Nome),
-                @Html.DisplayFor(model => model.Idade)
-                anos
-            </h4>
-        </div>
-    </div>
-    <br />
-    <div>
-        @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
-        {
-            <div class="d-flex">
-                <h4>
-                    <b>Email: </b>
-                    @Html.DisplayFor(model => model.Email)
-                </h4>
-            </div>
-        }
-
-
-
-
-        @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
-        {
-            <div class="d-flex">
-
-                <b>Estado: </b>
-
-                @if (Model.Estado)
-                {
-<p>Validado</p>
-
-
-        }
-        else
-        {
-            <form method="post" asp-action="Validar">
-                <input type="hidden" name="id" value="@Model.ID" />
-                <button type="submit" class="btn btn-outline-success mx-2">Validar</button>
-            </form>
-
-
-
-        }
-                </div>
-                <br />
+            <h4>Local:</h4>
+            <div id="mapSecundario"></div>
+            <br />
+            <div>
                 <div class="d-flex">
-                    <br />
-                    <a class="btn btn-outline-warning mx-2" asp-action="Edit" asp-route-id="@Model.ID">Alterar</a>
-                    <a class="btn btn-outline-danger mx-2" asp-action="Delete" asp-route-id="@Model.ID">Apagar</a>
-                    <a class="btn btn-outline-primary" asp-action="Index">Voltar</a>
+                    <h4>
+                        <b>Autor: </b>
+                        @Html.DisplayFor(model => model.Nome),
+                        @Html.DisplayFor(model => model.Idade)
+                        anos
+                    </h4>
                 </div>
+            </div>
+            <br />
+            <div>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                {
+                    <div class="d-flex">
+                        <h4>
+                            <b>Email: </b>
+                            @Html.DisplayFor(model => model.Email)
+                        </h4>
+                    </div>
+                }
+
+
+
+
+                @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                {
+                    <div class="d-flex">
+
+                        <b>Estado: </b>
+
+                        @if (Model.Estado)
+                        {
+                <p>Validado</p>
+
 
             }
+            else
+            {
+                <form method="post" asp-action="Validar">
+                    <input type="hidden" name="id" value="@Model.ID" />
+                    <button type="submit" class="btn btn-outline-success mx-2">Validar</button>
+                </form>
 
 
-            </div>
 
-            <script>
+            }
+                    </div>
+                    <br />
+                    <div class="d-flex">
+                        <br />
+                        <a class="btn btn-outline-warning mx-2" asp-action="Edit" asp-route-id="@Model.ID">Alterar</a>
+                        <a class="btn btn-outline-danger mx-2" asp-action="Delete" asp-route-id="@Model.ID">Apagar</a>
+                        <a class="btn btn-outline-primary" asp-action="Index">Voltar</a>
+                    </div>
+
+                }
+
+
+                </div>
+    </main>
+
+                <script>
     var map = L.map('mapSecundario').setView([parseFloat(@ViewBag.Latitude), parseFloat(@ViewBag.Longitude)], 11);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -158,5 +159,5 @@
 
     L.marker([parseFloat(@ViewBag.Latitude), parseFloat(@ViewBag.Longitude)], { icon: greenIcon}).addTo(map);
 
-            </script>
-            <br />
+                </script>
+                <br />
