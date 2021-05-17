@@ -43,11 +43,14 @@ namespace Luiza_Andaluz.Controllers
         /// </summary>
         /// <returns>View com as historias de Luiza Andaluz</returns>
         // GET: Historias
-        [Authorize]
-        [Authorize(Roles = "admin, irma")]
+        public async Task<IActionResult> Index(){
+            return View(await _context.Historias.Where(h => h.Estado == true).ToListAsync());
+        }
+
+        [HttpPost, ActionName("Index")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(String titulo, String descricao, DateTime? data)
         {
-
             if (titulo == null) titulo = "";
             if (descricao == null) descricao = "";
             if (data.HasValue)
@@ -58,7 +61,7 @@ namespace Luiza_Andaluz.Controllers
                     .Where(h => h.Titulo.Contains(titulo))
                     .Where(h => h.Descricao.Contains(descricao))
                     .Where(h => h.Data >= inputDate && h.Data < inputDateNextDay)
-                    .Include(h => h.Local).Where(h => h.Estado == false);
+                    .Include(h => h.Local).Where(h => h.Estado == true);
                 return View(await applicationDbContext.ToListAsync());
             }
             else
@@ -66,10 +69,9 @@ namespace Luiza_Andaluz.Controllers
                 var applicationDbContext = _context.Historias
                     .Where(h => h.Titulo.Contains(titulo))
                     .Where(h => h.Descricao.Contains(descricao))
-                    .Include(h => h.Local).Where(h => h.Estado == false);
+                    .Include(h => h.Local).Where(h => h.Estado == true);
                 return View(await applicationDbContext.ToListAsync());
             }
-            
         }
 
         /// <summary>

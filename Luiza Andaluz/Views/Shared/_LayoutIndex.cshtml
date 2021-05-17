@@ -70,23 +70,17 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="Create">Contar a minha Historia</a>
                         </li>
-                        @if (SignInManager.IsSignedIn(User))
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="">Histórias</a>
+                        </li>
+                        @if (SignInManager.IsSignedIn(User) && User.IsInRole("admin"))
                         {
-                            @if (User.IsInRole("admin") || User.IsInRole("irma"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="">Histórias</a>
-                                </li>
-                            }
-                            @if (User.IsInRole("admin"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="PorValidar">Validar</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="UtilizadoresEsperas" asp-action="">Admitir</a>
-                                </li>
-                            }
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="PorValidar">Validar</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="UtilizadoresEsperas" asp-action="">Admitir</a>
+                            </li>
                         }
                     </ul>
                 </div>
