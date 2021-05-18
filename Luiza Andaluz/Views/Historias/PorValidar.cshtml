@@ -27,16 +27,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Titulo)
             </td>
-            <td>
+            <td style="word-break: break-all">
                 @Html.DisplayFor(modelItem => item.Descricao)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Data)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Alterar</a> |
-                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.ID">Apagar</a>
+                <a asp-action="Edit" asp-route-id="@item.ID">Alterar </a>
+                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
+                <a asp-action="Delete" asp-route-id="@item.ID"> Apagar</a>
             </td>
         </tr>
 }

@@ -9,6 +9,8 @@
   <ItemGroup>
     <Compile Remove="Data\Migrations\20210319012123_CriacaoBaseDados.cs" />
     <Compile Remove="Data\Migrations\20210319012123_CriacaoBaseDados.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210412205305_utilizadorEspera.cs" />
+    <Compile Remove="Data\Migrations\20210412205305_utilizadorEspera.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Testes\" />
     <Folder Include="wwwroot\Ficheiros\" />
   </ItemGroup>
 

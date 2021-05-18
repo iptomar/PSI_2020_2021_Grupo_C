@@ -5,105 +5,110 @@
 }
 
 
-    <h1>Create</h1>
-
-    <h4>Historia</h4>
+<h1>Contar a minha Historia</h1>
     <hr />
     <div class="row">
         <div class="col-md-12">
+            <div>
+                <div class="form-group">
+                    <label class="control-label">Mapa</label>
+                    <div id="mapSecundario"></div>
+                </div>
+                <h4 id="aviso"></h4>
+            </div>
             <script>
-            function initMap() {
-                var options = {
-                    zoom: 4,
-                    center: { lat: 39.6019900, lng: -8.4092400 }
+            var map = L.map('mapSecundario').setView([39.6019900, -8.4092400], 4);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            @*
+            const locationButton = document.createElement("button");
+            locationButton.textContent = "Ir para a minha localização";
+            locationButton.classList.add("custom-map-control-button");
+
+            map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+
+            locationButton.addEventListener("click", () => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const pos = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                            };
+                            map.setCenter(pos);
+                        },
+                        () => {
+                            alert("Não foi possivel centrar o mapa na sua localização");
+                        }
+                    );
+                } else {
+                    alert("Não foi possivel centrar o mapa na sua localização");
                 }
+            });
+            *@
 
-                var map = new google.maps.Map(document.getElementById('mapSecundario'), options);
+            var marker = null;
 
-                //recebe locais
-                var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
-                //coloca marcadores de locais existentes no mapa
-                for (var i = 0; i < locais.length; i++) {
-                    const mark = new google.maps.Marker({
-                        position: { lat: parseFloat(locais[i].latitude), lng: parseFloat(locais[i].longitude) }, map, title: (i + ""),
-                    });
-                    //se um marcador for selecionado ele é guardado no formulário
-                    mark.addListener("click", () => {
-                        lat = parseFloat(mark.getPosition().lat());
-                        lng = parseFloat(mark.getPosition().lng());
-                        document.getElementById('lat').value = lat;
-                        document.getElementById('lng').value = lng;
-                    });
+            var greenIcon = L.icon({
+                iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+                shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+
+                iconSize: [38, 95], // size of the icon
+                shadowSize: [50, 64], // size of the shadow
+                iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+                shadowAnchor: [4, 62],  // the same for the shadow
+                popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+            });
+
+            var redIcon = L.icon({
+                iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-red.png',
+                shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+
+                iconSize: [38, 95], // size of the icon
+                shadowSize: [50, 64], // size of the shadow
+                iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+                shadowAnchor: [4, 62],  // the same for the shadow
+                popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+            });
+
+            map.on("click", (event) => {
+                if (marker != null) {
+                    map.removeLayer(marker);
+                    marker = null;
                 }
-                
-                const locationButton = document.createElement("button");
-                locationButton.textContent = "Ir para a minha localização";
-                locationButton.classList.add("custom-map-control-button");
+                marker = L.marker([event.latlng.lat, event.latlng.lng], { icon: redIcon}).addTo(map);
+                document.getElementById('lat').value = event.latlng.lat;
+                document.getElementById('lng').value = event.latlng.lng;
+                document.getElementById('aviso').innerHTML = "Localização Marcada";
+            });
 
-                map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-
-                locationButton.addEventListener("click", () => {
-                    if (navigator.geolocation) {
-                        navigator.geolocation.getCurrentPosition(
-                            (position) => {
-                                const pos = {
-                                    lat: position.coords.latitude,
-                                    lng: position.coords.longitude,
-                                };
-                                map.setCenter(pos);
-                            },
-                            () => {
-                                alert("Não foi possivel centrar o mapa na sua localização");
-                            }
-                        );
-                    } else {
-                        alert("Não foi possivel centrar o mapa na sua localização");
+            var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
+            for (var i = 0; i < locais.length; i++) {
+                local = [parseFloat(locais[i].latitude), parseFloat(locais[i].longitude)];
+                const marker1 = L.marker(local, { icon: greenIcon }).addTo(map);
+                marker1.on("click", () => {
+                    if (marker != null) {
+                        map.removeLayer(marker);
+                        marker = null;
                     }
-                });
-
-                
-                var marker = null;
-                //selecionar um novo local do mapa
-                map.addListener("click", (event) => {
-                    if (marker != null) marker.setMap(null);
-                    //coloca marcador
-                    marker = new google.maps.Marker({
-                        position: event.latLng, map, title: "Ponto",
-                    });
-                    //guarda no formulário
-                    document.getElementById('lat').value = event.latLng.lat();
-                    document.getElementById('lng').value = event.latLng.lng();
+                    document.getElementById('lat').value = parseFloat(local[0]);
+                    document.getElementById('lng').value = parseFloat(local[1]);
                     document.getElementById('aviso').innerHTML = "Localização Marcada";
                 });
-
-                var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
-
-                for (var i = 0; i < locais.length; i++) {
-                    const marker1 = new google.maps.Marker({
-                        position: { lat: parseFloat(locais[i].latitude), lng: parseFloat(locais[i].longitude) }, map, title: (i + ""), icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-                    });
-
-                    marker1.addListener("click", () => {
-                        if (marker != null) {
-                            marker.setMap(null);
-                            marker = null;
-                        }
-                        document.getElementById('lat').value = marker1.position.lat();
-                        document.getElementById('lng').value = marker1.position.lng();
-                        document.getElementById('aviso').innerHTML = "Localização Marcada";
-                    });
-                }
             }
             </script>
-            <div class="form-group">
-                <label class="control-label">Mapa</label>
-                <div id="mapSecundario"></div>
-                <script async defer
-                        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
-                </script>
-            </div>
-            <h4 id="aviso"></h4>
             <br />
+            <div id="success-message-container" class="alert alert-success text-center d-none">
+                <strong>Success!</strong> You have been subscribed successfully!
+            </div>
+
+            <div id="failure-message-container" class="alert alert-danger text-center d-none">
+                <strong>Failure!</strong> There is some problem with the service.Please try again.If the problem persists
+                please contract with system administrator!
+            </div>
             <form asp-action="Create" enctype="multipart/form-data" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="form-group">
@@ -139,14 +144,21 @@
                 <input asp-validation-for="lat" type="hidden" id="lat" name="lat" value="0" />
                 <input asp-validation-for="lng" type="hidden" id="lng" name="lng" value="0" />
                 <div class="form-group">
-                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <input type="submit" value="Criar História" class="btn btn-primary" />
                 </div>
             </form>
+            @if (ViewBag.Erro != null){
+                <script>
+                    window.onload = function () {
+                        alert("@ViewBag.Erro");
+                    };
+                </script>
+            }
         </div>
     </div>
 
     <div>
-        <a asp-action="Index">Back to List</a>
+        <a asp-action="Index">Lista de Histórias</a>
     </div>
 
 

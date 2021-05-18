@@ -3,97 +3,161 @@
 @{
     ViewData["Title"] = "Details";
 }
+<style>
+    body {
+        background-color: #dcdcdc;
+    }
+</style>
+<main id="main" style="background-color:#dcdcdc">
 
-<div>
-    <h1 class="display-4">@Html.DisplayFor(model => model.Titulo)</h1>
-    <br />
-    <p>@Html.DisplayFor(model => model.Descricao)<p>
-        <hr />
-        <dl class="row">
-            @if (User.Identity.IsAuthenticated)
-            {
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Estado)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Estado)
-                </dd>
-            }
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Nome)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Nome)
-            </dd>
-            <dt class="col-sm-2">
-                @Html.DisplayNameFor(model => model.Idade)
-            </dt>
-            <dd class="col-sm-10">
-                @Html.DisplayFor(model => model.Idade)
-            </dd>
-            @if (User.Identity.IsAuthenticated)
-            {
-                <dt class="col-sm-2">
-                    @Html.DisplayNameFor(model => model.Email)
-                </dt>
-                <dd class="col-sm-10">
-                    @Html.DisplayFor(model => model.Email)
-                </dd>
-            }
-        </dl>
-</div>
-@if (User.Identity.IsAuthenticated)
-{
-    <div>
-        <form method="post" asp-action="Validar">
-            <input type="hidden" name="id" value="@Model.ID" />
-            <button type="submit" class="btn btn-outline-warning btn-lg">Validar</button>
-        </form>
-    </div>
+    <div class="container">
+        <h2 class="d-flex">História: @Html.DisplayFor(model => model.Titulo)</h2>
 
-    <br />
-    <div>
-        <a asp-action="Edit" asp-route-id="@Model.ID">Alterar</a> |
-        <a asp-action="Delete" asp-route-id="@Model.ID">Apagar</a> |
-        <a asp-action="Index">Voltar</a>
-    </div>
-}
-<br />
-<div>
-    @foreach (var item in Model.Conteudo)
-    {
+        <p class="d-flex">@Html.DisplayFor(model => model.Descricao)<p>
+            <hr />
 
-        if (item.Tipo.Contains("png") || item.Tipo.Contains("jpg") || item.Tipo.Contains("gif") || item.Tipo.Contains("jfif"))
-        {
-            <img src="~/Ficheiros/@item.Ficheiro" class="rounded mx-auto d-block" style="max-width: 500px; max-height: 500px">
+
             <br />
-        }
-        else if (item.Tipo.Contains("mp4") || item.Tipo.Contains("mov"))
-        {
-            <div class="embed-responsive embed-responsive-21by9">
-                <iframe class="embed-responsive-item" src="~/Ficheiros/@item.Ficheiro" allowfullscreen></iframe>
+            @if (Model.Conteudo.Count > 1)
+            {
+                <h4>Imagens: </h4>
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        @foreach (var item in Model.Conteudo.Select((value, i) => new { i, value }))
+                        {
+                            if (item.value.Tipo.Contains("png") || item.value.Tipo.Contains("jpg") || item.value.Tipo.Contains("gif") || item.value.Tipo.Contains("jfif"))
+                            {
+                                <div class="carousel-item@(item.i == 0 ? " active" : "")">
+                                    <img class="d-block w-100" src="~/Ficheiros/@item.value.Ficheiro">
+                                </div>
+                            }
+                            else if (item.value.Tipo.Contains("mp4") || item.value.Tipo.Contains("mov"))
+                            {
+                                <div class="carousel-item@(item.i == 0 ? " active" : "")">
+                                    <div class="embed-responsive embed-responsive-21by9">
+                                        <iframe class="d-block w-100 embed-responsive-item" src="~/Ficheiros/@item.value.Ficheiro" allowfullscreen></iframe>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                    <a class="carousel-control-prev  border-info" href="#carouselExampleControls" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon bg-info" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next border-info" href="#carouselExampleControls" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon bg-info" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            }
+
+            @if (Model.Conteudo.Count == 1)
+            {
+
+                foreach (var item in Model.Conteudo)
+                {
+                    if (item.Tipo.Contains("png") || item.Tipo.Contains("jpg") || item.Tipo.Contains("gif") || item.Tipo.Contains("jfif"))
+                    {
+                        <img src="~/Ficheiros/@item.Ficheiro" class="rounded mx-auto d-block w-50 p-3">
+                        <br />
+                    }
+                    else if (item.Tipo.Contains("mp4") || item.Tipo.Contains("mov"))
+                    {
+                        <div class="embed-responsive embed-responsive-21by9">
+                            <iframe class="embed-responsive-item" src="~/Ficheiros/@item.Ficheiro" allowfullscreen></iframe>
+                        </div>
+                        <br />
+                    }
+                }
+            }
+            <hr />
+            <br />
+
+            <h4>Local:</h4>
+            <div id="mapSecundario"></div>
+            <br />
+            <div>
+                <div class="d-flex">
+                    <h4>
+                        <b>Autor: </b>
+                        @Html.DisplayFor(model => model.Nome),
+                        @Html.DisplayFor(model => model.Idade)
+                        anos
+                    </h4>
+                </div>
             </div>
             <br />
-        }
+            <div>
+                @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                {
+                    <div class="d-flex">
+                        <h4>
+                            <b>Email: </b>
+                            @Html.DisplayFor(model => model.Email)
+                        </h4>
+                    </div>
+                }
 
-    }
-</div>
-<div id="mapSecundario"></div>
-<script>
-function initMap() {
-    var options = {
-        zoom: 11,
-        center: { lat: parseFloat(@ViewBag.Latitude), lng: parseFloat(@ViewBag.Longitude) }
-    }
 
-    var map = new google.maps.Map(document.getElementById('mapSecundario'), options);
 
-    new google.maps.Marker({
-        position: { lat: parseFloat(@ViewBag.Latitude), lng: parseFloat(@ViewBag.Longitude) }, map, title: ("Localização"),
+
+                @if (User.Identity.IsAuthenticated && User.IsInRole("admin"))
+                {
+                    <div class="d-flex">
+
+                        <b>Estado: </b>
+
+                        @if (Model.Estado)
+                        {
+                <p>Validado</p>
+
+
+            }
+            else
+            {
+                <form method="post" asp-action="Validar">
+                    <input type="hidden" name="id" value="@Model.ID" />
+                    <button type="submit" class="btn btn-outline-success mx-2">Validar</button>
+                </form>
+
+
+
+            }
+                    </div>
+                    <br />
+                    <div class="d-flex">
+                        <br />
+                        <a class="btn btn-outline-warning mx-2" asp-action="Edit" asp-route-id="@Model.ID">Alterar</a>
+                        <a class="btn btn-outline-danger mx-2" asp-action="Delete" asp-route-id="@Model.ID">Apagar</a>
+                        <a class="btn btn-outline-primary" asp-action="Index">Voltar</a>
+                    </div>
+
+                }
+
+
+                </div>
+    </main>
+
+                <script>
+    var map = L.map('mapSecundario').setView([parseFloat(@ViewBag.Latitude), parseFloat(@ViewBag.Longitude)], 11);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    var greenIcon = L.icon({
+        iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+        shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+
+        iconSize: [38, 95], // size of the icon
+        shadowSize: [50, 64], // size of the shadow
+        iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
+        shadowAnchor: [4, 62],  // the same for the shadow
+        popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
     });
-}
-</script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
-</script>
-<br />
+
+    L.marker([parseFloat(@ViewBag.Latitude), parseFloat(@ViewBag.Longitude)], { icon: greenIcon}).addTo(map);
+
+                </script>
+                <br />

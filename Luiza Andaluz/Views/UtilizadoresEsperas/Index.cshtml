@@ -1,0 +1,45 @@
+﻿@model IEnumerable<LuizaAndaluz.Models.UtilizadoresEspera>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Utilizadores por Admitir</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th></th>
+            <th>Cargo</th>
+            <th>Confirmar</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td></td>
+            <form method="post" asp-action="Admitir">
+                <input type="hidden" name="id" value="@item.ID" />
+                <td>
+                    <div class="btn-group">
+                        <select id="carg" class="form-control" name="cargo">
+                            <option selected>Administrador</option>
+                            <option>Irmã</option>
+                            <option>Não Admitir</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-primary btn-sm">Confirmar</button>
+                </td>
+            </form>
+        </tr>
+}
+    </tbody>
+</table>

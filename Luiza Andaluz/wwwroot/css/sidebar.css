@@ -1,7 +1,7 @@
 ﻿.sidenav {
     display: none;
     height: 100%;
-    width: 450px;
+    max-width: 450px;
     position: fixed;
     z-index: 1;
     top: 0;

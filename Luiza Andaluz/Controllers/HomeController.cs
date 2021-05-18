@@ -16,22 +16,35 @@ namespace Luiza_Andaluz.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger)
-        {
+        public HomeController(ApplicationDbContext context, ILogger<HomeController> logger){
             _context = context;
             _logger = logger;
         }
 
-        public async Task<IActionResult> Index()
-        {
+        /// <summary>
+        /// retorna a pagina de Index
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IActionResult> Index(){
             var applicationDbContext = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true);
             ViewBag.locais = applicationDbContext.Select(x => x.Local).ToList();
             return View(await applicationDbContext.ToListAsync());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>retorna a pagina de privacidade</returns>
+        public IActionResult Privacy(){
+            return View();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>retorna uma pagina de erro</returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
+        public IActionResult Error(){
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
