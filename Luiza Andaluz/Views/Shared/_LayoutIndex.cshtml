@@ -71,7 +71,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="Create">Contar a minha Historia</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="">Histórias</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="Index">Histórias</a>
                         </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("admin"))
                         {

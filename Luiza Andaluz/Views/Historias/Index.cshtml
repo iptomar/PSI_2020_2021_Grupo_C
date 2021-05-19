@@ -4,64 +4,226 @@
 }
 <style>
     body {
-        background-color: #dcdcdc;
+        background-color: #375570;
     }
 </style>
 
 <h1>Histórias</h1>
-<form method="post" asp-action="Index">
-    <div class="form-group row">
-        <label for="Titulo" class="col-form-label ml-3"><b>Titulo</b></label>
-        <input class="form-control col-2 mx-2" type="text" name="titulo">
+@*<div>
+        <form method="post" asp-action="Index" class="col-md-10 col-sm-12">
+            <input class="d-none" type="text" name="page" value="1">
+            <div class="form-group d-flex flex-wrap">
+                <label for="titulo" class="col-form-label"><b>Titulo:</b></label>
+                <input class="form-control col-md-2 col-sm-12 mx-2" type="text" name="titulo" value=@ViewBag.Titulo>
 
-        <label for="Titulo" class="col-form-label"><b>Descrição</b></label>
-        <input class="form-control col-2 mx-2" type="text" name="descricao">
+                <label for="descricao" class="col-form-label"><b>Descrição:</b></label>
+                <input class="form-control col-md-2 col-sm-12 mx-2" type="text" name="descricao" value=@ViewBag.Descricao>
 
-        <label for="Titulo" class="col-form-label"><b>Data</b></label>
-        <input class="form-control col-2 mx-2" type="date" name="data">
-        <input class="btn-success btn" type="submit" value="Pesquisar" />
+                <label for="data" class="col-form-label"><b>Data:</b></label>
+                <input class="form-control col-md-2 col-sm-12  mx-2" type="date" name="data" value=@ViewBag.Data>
+
+                <input class="btn-success btn col-md-2 col-sm-12" type="submit" value="Pesquisar" />
+            </div>
+        </form>
+        <form method="get" asp-action="Index">
+            <input class="btn-warning btn form-group" type="submit" value="Limpar" />
+        </form>
+    </div>*@
+
+<div class="row mx-3">
+    <form method="post" asp-action="Index">
+        <input class="d-none" type="text" name="page" value="1">
+        <div class="row">
+            <div class="col-md-auto col-sm-12">
+                <div class="form-outline">
+                    <label class="form-label" for="titulo"><b>Titulo:</b></label>
+                    <input type="text" id="titulo" name="titulo" class="form-control" />
+                </div>
+            </div>
+
+            <div class="col-md-auto col-sm-12">
+                <div class="form-outline">
+                    <label class="form-label" for="descricao"><b>Descrição:</b></label>
+                    <input type="text" id="descricao" name="descricao" class="form-control" />
+                </div>
+            </div>
+
+            <div class="col-md-auto col-sm-12">
+                <div class="form-outline">
+                    <label class="form-label" for="data"><b>Data:</b></label>
+                    <input type="date" id="data" name="data" class="form-control" />
+                </div>
+            </div>
+
+            <div class="col-md-auto col-sm-12 mr-md-4 mt-2">
+                <div class="form-outline">
+                    <label class="form-label" for="pesquisar"><b> </b></label>
+                    <input class="btn-success btn form-control " type="submit" name="pesquisar" value="Pesquisar" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-md-auto col-sm-12 px-0 mt-2">
+        <form method="get" asp-action="Index">
+            <div class="form-outline">
+                <label class="form-label" for="liimpar"><b> </b></label>
+                <input class="btn-warning btn form-control" type="submit" name="limpar" value="Limpar" />
+            </div>
+        </form>
     </div>
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Titulo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Descricao)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Data)
-            </th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Titulo)
-                </td>
-                <td style="word-break: break-all">
-                    @Html.DisplayFor(modelItem => item.Descricao)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Data)
-                </td>
-                <td>
-                    @if (User.IsInRole("admin"))
-                    {
-                        <a class="btn btn-warning mx-1" asp-action="Edit" asp-route-id="@item.ID">Alterar </a>
-                    }
-                    <a class="btn btn-info mx-1" asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
-                    @if (User.IsInRole("admin"))
-                    {
-                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID"> Apagar</a>
-                    }
-                </td>
-            </tr>
+</div>
+
+<!-- Gallery -->
+<div class="row">
+    @{
+        var items = Model.ToList();
+
+        //0, 1, 2
+        //3, 4, 5
+        //6, 7, 8
+        int[] heights = new int[] { 500, 400, 300, 300, 300, 250, 200, 300, 450 };
+    }
+
+    @*coluna1*@
+    <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
+        @{
+            for (var i = 0; i < items.Count; i++)
+            {
+                if (i == 0 || i == 3 || i == 6)
+                {
+                    var url = "";
+                    url = items[i].Conteudo.FirstOrDefault() == null ? "https://via.placeholder.com/1080x1920" : items[i].Conteudo.First().Ficheiro;
+
+                    <h4 class="text-center mb-2">@items[i].Titulo</h4>
+                    <img src=@url class="w-100 shadow-1-strong rounded mb-4"
+                         alt=""
+                         style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+                }
+            }
         }
-    </tbody>
-</table>
+    </div>
+
+    @*coluna2*@
+    <div class="col-lg-4 mb-4 mb-lg-0">
+        @{
+            for (var i = 0; i < items.Count; i++)
+            {
+                if (i == 1 || i == 4 || i == 7)
+                {
+                    var url = "";
+                    url = items[i].Conteudo.FirstOrDefault() == null ? "https://via.placeholder.com/1080x1920" : items[i].Conteudo.First().Ficheiro;
+
+                    <h4 class="text-center mb-2">@items[i].Titulo</h4>
+                    <img src=@url class="w-100 shadow-1-strong rounded mb-4"
+                         alt=""
+                         style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+                }
+            }
+        }
+    </div>
+
+    @*coluna3*@
+    <div class="col-lg-4 mb-4 mb-lg-0">
+        @{
+            for (var i = 0; i < items.Count; i++)
+            {
+                if (i == 2 || i == 5 || i == 8)
+                {
+                    var url = "";
+                    url = items[i].Conteudo.FirstOrDefault() == null ? "https://via.placeholder.com/1080x1920" : items[i].Conteudo.First().Ficheiro;
+
+                    <h4 class="text-center mb-2">@items[i].Titulo</h4>
+                    <img src=@url class="w-100 shadow-1-strong rounded mb-4"
+                         alt=""
+                         style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+                }
+            }
+        }
+    </div>
+
+
+    <div class="w-100 px-4">
+        <nav aria-label="Page navigation example" class="float-right">
+            <form method="post" asp-action="Index">
+                <input class="d-none" type="text" name="page" value="" id="page">
+
+                <ul class="pagination">
+                    @if (ViewBag.Page != 1)
+                    {
+                        <li class="page-item">
+                            <input type="submit" class="page-link" value="Anterior" onclick="document.getElementById('page').value=@ViewBag.Page-1">
+                        </li>
+                    }
+                    <li class="page-item @(ViewBag.Page == 1 ? "active" : "") ">
+                        <input type="submit" class="page-link" name="page" value=1 onclick="document.getElementById('page').value='1'">
+                    </li>
+
+                    @{var counter = 2;}
+                    @for (var x = 1; x <= ViewBag.Historias; x++)
+                    {
+                        if (x / 9.0 > 1)
+                        {
+                            <li class="page-item @(ViewBag.Page == counter ? "active" : "") ">
+                                <input type="submit" class="page-link" value=@counter onclick="document.getElementById('page').value=@counter">
+                            </li>
+                            counter++;
+                        }
+                    }
+
+                    @if (ViewBag.Page + 1 < counter)
+                    {
+                        <li class="page-item">
+                            <input type="submit" class="page-link" value="Seguinte" onclick="document.getElementById('page').value=@ViewBag.Page+1">
+                        </li>
+
+                    }
+
+                </ul>
+            </form>
+        </nav>
+    </div>
+</div>
+
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Titulo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Descricao)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Data)
+                </th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Titulo)
+                    </td>
+                    <td style="word-break: break-all">
+                        @Html.DisplayFor(modelItem => item.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Data)
+                    </td>
+                    <td>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <a class="btn btn-warning mx-1" asp-action="Edit" asp-route-id="@item.ID">Alterar </a>
+                        }
+                        <a class="btn btn-info mx-1" asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID"> Apagar</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
