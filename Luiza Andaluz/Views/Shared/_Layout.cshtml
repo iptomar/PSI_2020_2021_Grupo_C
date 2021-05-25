@@ -41,7 +41,7 @@
 
     <style>
         #mapPrincipal {
-            height: 100%;
+            height: 100vh;
             width: 100%
         }
 
@@ -49,27 +49,12 @@
             height: 400px;
             width: 100%
         }
-
-        Map {
-            background-color: #e0e0e0;
-        }
-
-        #countries {
-            :: outline{
-                line-color: #000000;
-                line-width: 2;
-                line-join: round;
-            }
-
-            polygon-fill: #ffce0c;
-        }
     </style>
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm  border-bottom box-shadow"
-             style="font:'ITC Avant Garde Gothic Std';background-color: #253746"
-             >
+             style="font:'ITC Avant Garde Gothic Std';background-color: #253746">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="assets\img\FAVICON-LACC-YELLOW.png" title="title" alt="additional title" width="30" height="30" />
@@ -85,25 +70,21 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Historias" asp-action="Create"
-                                style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D"
-                               >Contar a minha Historia</a>
+                               style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D">Contar a minha Historia</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Historias" asp-action=""
-                                style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D"
-                               >Histórias</a>
+                               style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D">Histórias</a>
                         </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link " asp-area="" asp-controller="Historias" asp-action="PorValidar"
-                                    style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D"
-                                   >Validar</a>
+                                   style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D">Validar</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link " asp-area="" asp-controller="UtilizadoresEsperas" asp-action=""
-                                    style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D"
-                                   >Admitir</a>
+                                   style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D">Admitir</a>
                             </li>
                         }
                     </ul>
@@ -111,7 +92,7 @@
             </div>
         </nav>
     </header>
-
+    <br /><br />
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
@@ -120,7 +101,7 @@
     <br />
     <br />
 
-    <footer class="border-bottom footer text-muted">
+    <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2021 - Luiza_Andaluz - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
