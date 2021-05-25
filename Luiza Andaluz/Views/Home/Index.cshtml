@@ -3,8 +3,6 @@
     ViewData["Title"] = "Home Page";
 }
 
-
-
 <style>
     body {
         background-color: #dcdcdc;
@@ -18,18 +16,12 @@
                 var map = L.map('mapPrincipal').setView([39.6019900, -8.4092400], 4);
 
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 18
                 }).addTo(map);
 
                 var greenIcon = L.icon({
-                    iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
-                    shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
-
-                    iconSize: [38, 95], // size of the icon
-                    shadowSize: [50, 64], // size of the shadow
-                    iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-                    shadowAnchor: [4, 62],  // the same for the shadow
-                    popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+                    iconUrl: '/assets/img/FAVICON-LACC-YELLOW.png',
+                    iconSize: [38, 38], // size of the icon
                 });
 
                 var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
@@ -107,21 +99,8 @@
                 }
 
     </script>
-    @*<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCzF3-at94AexQQTqYBX26DsWSvQ2h0RF0&callback=initMap">
-        </script>*@
-    </div>
-    </section><!-- End About Section -->
 
-
-
-
-</main><!-- End #main -->
-<!-- ======= Footer ======= -->
-
-
-<div id="preloader"></div>
-<a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>
+</main>
 
 <!-- Vendor JS Files -->
 <script src="assets/vendor/jquery/jquery.min.js"></script>
