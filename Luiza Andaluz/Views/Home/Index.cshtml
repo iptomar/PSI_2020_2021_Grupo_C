@@ -13,10 +13,14 @@
 
 <main id="main" style="background-color:#dcdcdc">
     <div id="mySidenav" class="sidenav px-2" style="z-index: 10"></div>
-    <div id="mapPrincipal" style="z-index:0"></div>
+    <div id="mapPrincipal" style='        z-index: 0;
+        height: 100vh;
+        border-width: 10px;
+        border-radius: 25px;
+        border-color: #FFB81D;'}></div>
     <script>
-                var map = L.map('mapPrincipal').setView([39.6019900, -8.4092400], 4);
-
+        var map = L.map('mapPrincipal').setView([39.6019900, -8.4092400], 4);
+       
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                 }).addTo(map);
@@ -31,6 +35,7 @@
                     shadowAnchor: [4, 62],  // the same for the shadow
                     popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
                 });
+       // Document.getElementById('mapPrincipal').style = "height='document.body.clientHeight'";
 
                 var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
                 for (var i = 0; i < locais.length; i++) {
