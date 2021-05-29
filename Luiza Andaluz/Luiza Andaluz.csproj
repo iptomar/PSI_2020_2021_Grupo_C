@@ -11,6 +11,10 @@
     <Compile Remove="Data\Migrations\20210319012123_CriacaoBaseDados.Designer.cs" />
     <Compile Remove="Data\Migrations\20210412205305_utilizadorEspera.cs" />
     <Compile Remove="Data\Migrations\20210412205305_utilizadorEspera.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210415224945_ola.cs" />
+    <Compile Remove="Data\Migrations\20210415224945_ola.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210529123243_idade.cs" />
+    <Compile Remove="Data\Migrations\20210529123243_idade.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

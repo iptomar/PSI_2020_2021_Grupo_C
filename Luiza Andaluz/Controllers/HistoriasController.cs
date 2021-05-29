@@ -44,7 +44,7 @@ namespace Luiza_Andaluz.Controllers
         /// <returns>View com as historias de Luiza Andaluz</returns>
         // GET: Historias
         public async Task<IActionResult> Index(){
-            var historias = _context.Historias.ToList();
+            var historias = _context.Historias.Include(h => h.Conteudo).ToList();
 
             ViewBag.Page = 1;
             ViewBag.Historias = historias.Count;
@@ -59,7 +59,7 @@ namespace Luiza_Andaluz.Controllers
             if(titulo == null && descricao == null && !data.HasValue)
             {
 
-                var historias = _context.Historias.ToList();
+                var historias = _context.Historias.Where(h => h.Estado==true).Include(h => h.Conteudo).ToList();
 
                 var applicationDbContext = new List<Historia> { };
                 try
@@ -86,10 +86,13 @@ namespace Luiza_Andaluz.Controllers
                     var inputDate = data.Value.Date;
                     var inputDateNextDay = data.Value.Date.AddDays(1);
                     var historias = _context.Historias
+                        .Where(h => h.Estado == true)
                         .Where(h => h.Titulo.Contains(titulo))
                         .Where(h => h.Descricao.Contains(descricao))
                         .Where(h => h.Data >= inputDate && h.Data < inputDateNextDay)
-                        .Include(h => h.Local).Where(h => h.Estado == true).ToList();
+                        .Include(h => h.Local).Where(h => h.Estado == true)
+                        .Include(h => h.Conteudo)
+                        .ToList();
 
                     var applicationDbContext = new List<Historia> { };
                     try
@@ -110,9 +113,12 @@ namespace Luiza_Andaluz.Controllers
                 else
                 {
                     var historias= _context.Historias
+                        .Where(h => h.Estado == true)
                         .Where(h => h.Titulo.Contains(titulo))
                         .Where(h => h.Descricao.Contains(descricao))
-                        .Include(h => h.Local).Where(h => h.Estado == true).ToList();
+                        .Include(h => h.Local).Where(h => h.Estado == true)
+                        .Include(h => h.Conteudo)
+                        .ToList();
 
                     var applicationDbContext = new List<Historia> { };
                     try

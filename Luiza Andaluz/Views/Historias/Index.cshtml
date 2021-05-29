@@ -2,35 +2,10 @@
 @{
     ViewData["Title"] = "Index";
 }
-<style>
-    body {
-        background-color: #375570;
-    }
-</style>
 
 <h1>Histórias</h1>
-@*<div>
-        <form method="post" asp-action="Index" class="col-md-10 col-sm-12">
-            <input class="d-none" type="text" name="page" value="1">
-            <div class="form-group d-flex flex-wrap">
-                <label for="titulo" class="col-form-label"><b>Titulo:</b></label>
-                <input class="form-control col-md-2 col-sm-12 mx-2" type="text" name="titulo" value=@ViewBag.Titulo>
 
-                <label for="descricao" class="col-form-label"><b>Descrição:</b></label>
-                <input class="form-control col-md-2 col-sm-12 mx-2" type="text" name="descricao" value=@ViewBag.Descricao>
-
-                <label for="data" class="col-form-label"><b>Data:</b></label>
-                <input class="form-control col-md-2 col-sm-12  mx-2" type="date" name="data" value=@ViewBag.Data>
-
-                <input class="btn-success btn col-md-2 col-sm-12" type="submit" value="Pesquisar" />
-            </div>
-        </form>
-        <form method="get" asp-action="Index">
-            <input class="btn-warning btn form-group" type="submit" value="Limpar" />
-        </form>
-    </div>*@
-
-<div class="row mx-3">
+<div class="row mx-3 mb-3">
     <form method="post" asp-action="Index">
         <input class="d-none" type="text" name="page" value="1">
         <div class="row">
@@ -76,7 +51,7 @@
 <!-- Gallery -->
 <div class="row">
     @{
-        var items = Model.ToList();
+        var items = Model.Where(h => h.Estado == true).ToList();
 
         //0, 1, 2
         //3, 4, 5
@@ -87,17 +62,32 @@
     @*coluna1*@
     <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
         @{
-            for (var i = 0; i < items.Count; i++)
+            for (var i = 0; i < items.Count(); i++)
             {
                 if (i == 0 || i == 3 || i == 6)
                 {
-                    var url = "";
-                    url = items[i].Conteudo.FirstOrDefault() == null ? "https://via.placeholder.com/1080x1920" : items[i].Conteudo.First().Ficheiro;
+                    <a href="historias/details/@items[i].ID">
+                        <h4 class="text-center mb-2" style="cursor:pointer;">@items[i].Titulo</h4>
 
-                    <h4 class="text-center mb-2">@items[i].Titulo</h4>
-                    <img src=@url class="w-100 shadow-1-strong rounded mb-4"
-                         alt=""
-                         style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+
+                        @if (items[i].Conteudo.Count() == 0)
+                        {
+                            <img src="/Ficheiros/exemplo.jfif" class="w-100 shadow-1-strong rounded mb-4 gallery-image"
+                                 alt="/Ficheiros/exemplo.jfif"
+                                 style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+                        }
+                        else if (items[i].Conteudo.First().Tipo == ".png" || items[i].Conteudo.First().Tipo == ".jpeg" || items[i].Conteudo.First().Tipo == ".jpg" || items[i].Conteudo.First().Tipo == ".gif" || items[i].Conteudo.First().Tipo == ".jfif")
+                        {
+                            <img src="/Ficheiros/@items[i].Conteudo.First().Ficheiro" class="w-100 shadow-1-strong rounded mb-4 gallery-image"
+                                 alt="/Ficheiros/@items[i].Conteudo.First().Ficheiro"
+                                 style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+                        }
+                        else
+                        {
+                            <iframe class="card-img-top" src="/Ficheiros/@items[i].Conteudo.First().Ficheiro" allowfullscreen></iframe>
+                        }
+
+                    </a>
                 }
             }
         }
@@ -106,17 +96,33 @@
     @*coluna2*@
     <div class="col-lg-4 mb-4 mb-lg-0">
         @{
-            for (var i = 0; i < items.Count; i++)
+            for (var i = 0; i < items.Count(); i++)
             {
                 if (i == 1 || i == 4 || i == 7)
                 {
-                    var url = "";
-                    url = items[i].Conteudo.FirstOrDefault() == null ? "https://via.placeholder.com/1080x1920" : items[i].Conteudo.First().Ficheiro;
 
-                    <h4 class="text-center mb-2">@items[i].Titulo</h4>
-                    <img src=@url class="w-100 shadow-1-strong rounded mb-4"
-                         alt=""
-                         style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+                    <a href="historias/details/@items[i].ID">
+                        <h4 class="text-center mb-2" style="cursor:pointer;">@items[i].Titulo</h4>
+
+
+                        @if (items[i].Conteudo.Count() == 0)
+                        {
+                            <img src="/Ficheiros/exemplo.jfif" class="w-100 shadow-1-strong rounded mb-4 gallery-image"
+                                 alt="/Ficheiros/exemplo.jfif"
+                                 style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+                        }
+                        else if (items[i].Conteudo.First().Tipo == ".png" || items[i].Conteudo.First().Tipo == ".jpg" || items[i].Conteudo.First().Tipo == ".gif" || items[i].Conteudo.First().Tipo == ".jfif")
+                        {
+                            <img src="/Ficheiros/@items[i].Conteudo.First().Ficheiro" class="w-100 shadow-1-strong rounded mb-4 gallery-image"
+                                 alt="/Ficheiros/@items[i].Conteudo.First().Ficheiro"
+                                 style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+                        }
+                        else
+                        {
+                            <iframe class="card-img-top" src="/Ficheiros/@items[i].Conteudo.First().Ficheiro" allowfullscreen></iframe>
+                        }
+
+                    </a>
                 }
             }
         }
@@ -125,105 +131,78 @@
     @*coluna3*@
     <div class="col-lg-4 mb-4 mb-lg-0">
         @{
-            for (var i = 0; i < items.Count; i++)
+            for (var i = 0; i < items.Count(); i++)
             {
                 if (i == 2 || i == 5 || i == 8)
                 {
-                    var url = "";
-                    url = items[i].Conteudo.FirstOrDefault() == null ? "https://via.placeholder.com/1080x1920" : items[i].Conteudo.First().Ficheiro;
+                    <a href="historias/details/@items[i].ID">
+                        <h4 class="text-center mb-2" style="cursor:pointer;">@items[i].Titulo</h4>
 
-                    <h4 class="text-center mb-2">@items[i].Titulo</h4>
-                    <img src=@url class="w-100 shadow-1-strong rounded mb-4"
-                         alt=""
-                         style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+
+                        @if (items[i].Conteudo.Count() == 0)
+                        {
+                            <img src="/Ficheiros/exemplo.jfif" class="w-100 shadow-1-strong rounded mb-4 gallery-image"
+                                 alt="/Ficheiros/exemplo.jfif"
+                                 style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+                        }
+                        else if (items[i].Conteudo.First().Tipo == ".png" || items[i].Conteudo.First().Tipo == ".jpg" || items[i].Conteudo.First().Tipo == ".gif" || items[i].Conteudo.First().Tipo == ".jfif")
+                        {
+                            <img src="/Ficheiros/@items[i].Conteudo.First().Ficheiro" class="w-100 shadow-1-strong rounded mb-4 gallery-image"
+                                 alt="/Ficheiros/@items[i].Conteudo.First().Ficheiro"
+                                 style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+                        }
+                        else
+                        {
+                            <iframe class="card-img-top" src="/Ficheiros/@items[i].Conteudo.First().Ficheiro" allowfullscreen></iframe>
+                        }
+
+                    </a>
                 }
             }
         }
     </div>
 
+    @if (Model.Where(h => h.Estado == true).Count() > 0)
+    {
+        <div class="w-100 px-4">
+            <nav aria-label="Page navigation example" class="float-right">
+                <form method="post" asp-action="Index">
+                    <input class="d-none" type="text" name="page" value="" id="page">
 
-    <div class="w-100 px-4">
-        <nav aria-label="Page navigation example" class="float-right">
-            <form method="post" asp-action="Index">
-                <input class="d-none" type="text" name="page" value="" id="page">
-
-                <ul class="pagination">
-                    @if (ViewBag.Page != 1)
-                    {
-                        <li class="page-item">
-                            <input type="submit" class="page-link" value="Anterior" onclick="document.getElementById('page').value=@ViewBag.Page-1">
-                        </li>
-                    }
-                    <li class="page-item @(ViewBag.Page == 1 ? "active" : "") ">
-                        <input type="submit" class="page-link" name="page" value=1 onclick="document.getElementById('page').value='1'">
-                    </li>
-
-                    @{var counter = 2;}
-                    @for (var x = 1; x <= ViewBag.Historias; x++)
-                    {
-                        if (x / 9.0 > 1)
+                    <ul class="pagination">
+                        @if (ViewBag.Page != 1)
                         {
-                            <li class="page-item @(ViewBag.Page == counter ? "active" : "") ">
-                                <input type="submit" class="page-link" value=@counter onclick="document.getElementById('page').value=@counter">
+                            <li class="page-item">
+                                <input type="submit" class="page-link" value="Anterior" onclick="document.getElementById('page').value=@ViewBag.Page-1">
                             </li>
-                            counter++;
                         }
-                    }
-
-                    @if (ViewBag.Page + 1 < counter)
-                    {
-                        <li class="page-item">
-                            <input type="submit" class="page-link" value="Seguinte" onclick="document.getElementById('page').value=@ViewBag.Page+1">
+                        <li class="page-item @(ViewBag.Page == 1 ? "active" : "") ">
+                            <input type="submit" class="page-link" name="page" value=1 onclick="document.getElementById('page').value='1'">
                         </li>
 
-                    }
+                        @{var counter = 2;}
+                        @for (var x = 1; x <= ViewBag.Historias; x++)
+                        {
+                            if (x / 9.0 > 1)
+                            {
+                                <li class="page-item @(ViewBag.Page == counter ? "active" : "") ">
+                                    <input type="submit" class="page-link" value=@counter onclick="document.getElementById('page').value=@counter">
+                                </li>
+                                counter++;
+                            }
+                        }
 
-                </ul>
-            </form>
-        </nav>
-    </div>
+                        @if (ViewBag.Page + 1 < counter)
+                        {
+                            <li class="page-item">
+                                <input type="submit" class="page-link" value="Seguinte" onclick="document.getElementById('page').value=@ViewBag.Page+1">
+                            </li>
+
+                        }
+
+                    </ul>
+                </form>
+            </nav>
+        </div>
+    }
 </div>
-
-@*<table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Titulo)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Descricao)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Data)
-                </th>
-                <th>Ações</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Titulo)
-                    </td>
-                    <td style="word-break: break-all">
-                        @Html.DisplayFor(modelItem => item.Descricao)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Data)
-                    </td>
-                    <td>
-                        @if (User.IsInRole("admin"))
-                        {
-                            <a class="btn btn-warning mx-1" asp-action="Edit" asp-route-id="@item.ID">Alterar </a>
-                        }
-                        <a class="btn btn-info mx-1" asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
-                        @if (User.IsInRole("admin"))
-                        {
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID"> Apagar</a>
-                        }
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>*@
