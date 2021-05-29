@@ -5,7 +5,19 @@
 }
 
 <h1>Histórias por Validar</h1>
+<form method="post" asp-action="PorValidar">
+    <div class="form-group row">
+        <label for="Titulo" class="col-form-label ml-3"><b>Titulo</b></label>
+        <input class="form-control col-2 mx-2" type="text" name="titulo">
 
+        <label for="Titulo" class="col-form-label"><b>Descrição</b></label>
+        <input class="form-control col-2 mx-2" type="text" name="descricao">
+
+        <label for="Titulo" class="col-form-label"><b>Data</b></label>
+        <input class="form-control col-2 mx-2" type="date" name="data">
+        <input class="btn-success btn" type="submit" value="Pesquisar" />
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -34,9 +46,9 @@
                 @Html.DisplayFor(modelItem => item.Data)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ID">Alterar </a>
-                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
-                <a asp-action="Delete" asp-route-id="@item.ID"> Apagar</a>
+                <a class="btn btn-warning mx-1" asp-action="Edit" asp-route-id="@item.ID">Alterar </a>
+                <a class="btn btn-info mx-1" asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID"> Apagar</a>
             </td>
         </tr>
 }

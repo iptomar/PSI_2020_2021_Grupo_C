@@ -86,6 +86,35 @@ namespace Luiza_Andaluz.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
+        [HttpPost, ActionName("PorValidar")]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> PorValidar(String titulo, String descricao, DateTime? data)
+        {
+            if (titulo == null) titulo = "";
+            if (descricao == null) descricao = "";
+            if (data.HasValue)
+            {
+                var inputDate = data.Value.Date;
+                var inputDateNextDay = data.Value.Date.AddDays(1);
+                var applicationDbContext = _context.Historias
+                    .Where(h => h.Titulo.Contains(titulo))
+                    .Where(h => h.Descricao.Contains(descricao))
+                    .Where(h => h.Data >= inputDate && h.Data < inputDateNextDay)
+                    .Include(h => h.Local).Where(h => h.Estado == false);
+                return View(await applicationDbContext.ToListAsync());
+            }
+            else
+            {
+                var applicationDbContext = _context.Historias
+                    .Where(h => h.Titulo.Contains(titulo))
+                    .Where(h => h.Descricao.Contains(descricao))
+                    .Include(h => h.Local).Where(h => h.Estado == false);
+                return View(await applicationDbContext.ToListAsync());
+            }
+        }
+
         /// <summary>
         /// acede á BD e retira as historias de luiza andaluz com as coordenadas passadas
         /// </summary>
