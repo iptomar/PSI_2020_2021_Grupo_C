@@ -164,6 +164,9 @@ namespace Luiza_Andaluz.Controllers
             if (historia == null){
                 return NotFound();
             }
+            
+            int idade = DateTime.Now.Subtract(historia.DataNascimento.Date).Days / 365;
+            ViewBag.Idade = idade;
 
             Local loc = await _context.Local.FirstOrDefaultAsync(l => l.ID == historia.LocalFK);
             ViewBag.latitude = loc.Latitude;
@@ -452,5 +455,7 @@ namespace Luiza_Andaluz.Controllers
         public string Data;
         public string Conteudo;
     }
+
+   
 
 }
