@@ -22,7 +22,6 @@
                     iconUrl: '/assets/img/FAVICON-LACC-YELLOW.png',
                     iconSize: [38, 38], // size of the icon
                 });
-       // Document.getElementById('mapPrincipal').style = "height='document.body.clientHeight'";
 
                 var locais = @Html.Raw(Json.Serialize(@ViewBag.locais));
                 for (var i = 0; i < locais.length; i++) {

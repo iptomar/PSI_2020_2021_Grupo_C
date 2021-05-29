@@ -187,7 +187,7 @@ namespace Luiza_Andaluz.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Titulo,Descricao,Nome,Idade,Email")] Historia historia, List<IFormFile> fich, String lat, String lng){
+        public async Task<IActionResult> Create([Bind("ID,Titulo,Descricao,Nome,DataNascimento,Email")] Historia historia, List<IFormFile> fich, String lat, String lng){
             if (lat.Equals("0") || lng.Equals("0")){
                 ViewBag.Erro = "Insira um Local";
                 return View();
