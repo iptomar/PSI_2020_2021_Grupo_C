@@ -126,40 +126,57 @@
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div class="form-group">
                         <label asp-for="Titulo" class="control-label" style="color:#FFB81D"></label>
-                        <input asp-for="Titulo" class="form-control" style="background-color:#75808b; border-color:#FFB81D"/>
+                        <input asp-for="Titulo" class="form-control" style="        background-color: #75808b;
+        border-color: #FFB81D;
+        color: #ffdfa4
+"/>
                         <span asp-validation-for="Titulo" class="text-danger" ></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Descricao" class="control-label" style="color:#FFB81D"></label>
-                        <textarea asp-for="Descricao" rows="4" cols="50" class="form-control" style="background-color:#75808b; border-color:#FFB81D"></textarea>
+                        <textarea asp-for="Descricao" rows="4" cols="50" class="form-control" style="        background-color: #75808b;
+        border-color: #FFB81D;
+        color: #ffdfa4
+"></textarea>
                         <span asp-validation-for="Descricao" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label  for="file-upload" class="control-label btn btn-outline-primary" style="color:#FFB81D">
                             Carregar Ficheiros
                         </label>
-                        <input id="file-upload" type="file" name="fich" multiple="multiple" style="display:none" />
+                        <input id="file-upload" type="file" name="fich" multiple="multiple" style="        display: none;
+        color: #ffdfa4
+" />
 
                     </div>
                     <div class="form-group">
                         <label asp-for="Nome" class="control-label" style="color:#FFB81D"></label>
-                        <input asp-for="Nome" class="form-control" style="background-color:#75808b; border-color:#FFB81D" />
+                        <input asp-for="Nome" class="form-control" style="        background-color: #75808b;
+                        border-color: #FFB81D;
+                        color: #ffdfa4
+" />
                         <span asp-validation-for="Nome" class="text-danger" ></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="DataNascimento" class="control-label" style="color:#FFB81D"></label>
-                        <input asp-for="DataNascimento" class="form-control" style="background-color:#75808b; border-color:#FFB81D"/>
+                        <input asp-for="DataNascimento" class="form-control" style="background-color: #75808b;
+                        border-color: #FFB81D;
+                        color: #ffdfa4
+"/>
                         <span asp-validation-for="DataNascimento" class="text-danger"></span>
                     </div>
                     <div class="form-group">
                         <label asp-for="Email" class="control-label" style="color:#FFB81D"></label>
-                        <input asp-for="Email" class="form-control" style="background-color:#75808b; border-color:#FFB81D"/>
+                        <input asp-for="Email" class="form-control" style="        background-color: #75808b;
+                         border-color: #FFB81D;
+                         color: #ffdfa4
+"/>
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
                     <input asp-validation-for="lat" type="hidden" id="lat" name="lat" value="0" />
                     <input asp-validation-for="lng" type="hidden" id="lng" name="lng" value="0" />
                     <div class="form-group">
-                        <input type="submit" value="Criar História" class="btn btn-primary" />
+                        <input type="submit" value="Criar História" class="control-label btn btn-outline-primary" style="color:#FFB81D" />
                     </div>
                 </form>
                 @if (ViewBag.Erro != null)
@@ -174,7 +191,7 @@
         </div>
 
         <div>
-            <a asp-action="Index">Lista de Histórias</a>
+            <a asp-action="Index" class="control-label btn btn-outline-primary" style="color:#FFB81D">Lista de Histórias</a>
         </div>
     </div>
     </main>
