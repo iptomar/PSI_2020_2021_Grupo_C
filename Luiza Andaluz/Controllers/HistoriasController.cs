@@ -44,33 +44,99 @@ namespace Luiza_Andaluz.Controllers
         /// <returns>View com as historias de Luiza Andaluz</returns>
         // GET: Historias
         public async Task<IActionResult> Index(){
+            var historias = _context.Historias.Include(h => h.Conteudo).ToList();
+
+            ViewBag.Page = 1;
+            ViewBag.Historias = historias.Count;
+
             return View(await _context.Historias.Where(h => h.Estado == true).ToListAsync());
         }
 
         [HttpPost, ActionName("Index")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(String titulo, String descricao, DateTime? data)
+        public IActionResult Index(String titulo, String descricao, DateTime? data, int page)
         {
-            if (titulo == null) titulo = "";
-            if (descricao == null) descricao = "";
-            if (data.HasValue)
+            if(titulo == null && descricao == null && !data.HasValue)
             {
-                var inputDate = data.Value.Date;
-                var inputDateNextDay = data.Value.Date.AddDays(1);
-                var applicationDbContext = _context.Historias
-                    .Where(h => h.Titulo.Contains(titulo))
-                    .Where(h => h.Descricao.Contains(descricao))
-                    .Where(h => h.Data >= inputDate && h.Data < inputDateNextDay)
-                    .Include(h => h.Local).Where(h => h.Estado == true);
-                return View(await applicationDbContext.ToListAsync());
+
+                var historias = _context.Historias.Where(h => h.Estado==true).Include(h => h.Conteudo).ToList();
+
+                var applicationDbContext = new List<Historia> { };
+                try
+                {
+                    applicationDbContext = historias.GetRange((page - 1) * 9, page * 9);
+                }catch(Exception){
+                    applicationDbContext = historias.GetRange((page - 1) * 9, historias.Count-((page-1)*9));
+                }
+
+                ViewBag.Titulo = titulo;
+                ViewBag.Descricao = descricao;
+                ViewBag.Data = data;
+                ViewBag.Page = page;
+                ViewBag.Historias = historias.Count;
+
+                return View(applicationDbContext.ToList());
             }
             else
-            {
-                var applicationDbContext = _context.Historias
-                    .Where(h => h.Titulo.Contains(titulo))
-                    .Where(h => h.Descricao.Contains(descricao))
-                    .Include(h => h.Local).Where(h => h.Estado == true);
-                return View(await applicationDbContext.ToListAsync());
+            {     
+                if (titulo == null) titulo = "";
+                if (descricao == null) descricao = "";
+                if (data.HasValue)
+                {
+                    var inputDate = data.Value.Date;
+                    var inputDateNextDay = data.Value.Date.AddDays(1);
+                    var historias = _context.Historias
+                        .Where(h => h.Estado == true)
+                        .Where(h => h.Titulo.Contains(titulo))
+                        .Where(h => h.Descricao.Contains(descricao))
+                        .Where(h => h.Data >= inputDate && h.Data < inputDateNextDay)
+                        .Include(h => h.Local).Where(h => h.Estado == true)
+                        .Include(h => h.Conteudo)
+                        .ToList();
+
+                    var applicationDbContext = new List<Historia> { };
+                    try
+                    {
+                        applicationDbContext = historias.GetRange((page - 1) * 9, page * 9);
+                    }
+                    catch (Exception){                 
+                        applicationDbContext = historias.GetRange((page - 1) * 9, historias.Count - ((page - 1) * 9));
+                    }
+
+                    ViewBag.Titulo = titulo;
+                    ViewBag.Descricao = descricao;
+                    ViewBag.Data = data.Value.ToString("yyyy/MM/dd").Replace("/","-");
+                    ViewBag.Page = page;
+
+                    return View(applicationDbContext.ToList());
+                }
+                else
+                {
+                    var historias= _context.Historias
+                        .Where(h => h.Estado == true)
+                        .Where(h => h.Titulo.Contains(titulo))
+                        .Where(h => h.Descricao.Contains(descricao))
+                        .Include(h => h.Local).Where(h => h.Estado == true)
+                        .Include(h => h.Conteudo)
+                        .ToList();
+
+                    var applicationDbContext = new List<Historia> { };
+                    try
+                    {
+                        applicationDbContext = historias.GetRange((page - 1) * 9, page * 9);
+                    }
+                    catch (Exception)
+                    {
+                        applicationDbContext = historias.GetRange((page - 1) * 9, historias.Count - ((page - 1) * 9));
+                    }
+
+                    ViewBag.Titulo = titulo;
+                    ViewBag.Descricao = descricao;
+                    ViewBag.Data = data;
+                    ViewBag.Page = page;
+
+                    return View(applicationDbContext);
+                }
             }
         }
 
