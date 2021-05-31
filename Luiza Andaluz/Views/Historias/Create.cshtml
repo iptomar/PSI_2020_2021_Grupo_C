@@ -36,33 +36,6 @@
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 18
             }).addTo(map);
 
-            @*
-            const locationButton = document.createElement("button");
-            locationButton.textContent = "Ir para a minha localização";
-            locationButton.classList.add("custom-map-control-button");
-
-            map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-
-            locationButton.addEventListener("click", () => {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            const pos = {
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude,
-                            };
-                            map.setCenter(pos);
-                        },
-                        () => {
-                            alert("Não foi possivel centrar o mapa na sua localização");
-                        }
-                    );
-                } else {
-                    alert("Não foi possivel centrar o mapa na sua localização");
-                }
-            });
-            *@
-
             var marker = null;
 
             var greenIcon = L.icon({
