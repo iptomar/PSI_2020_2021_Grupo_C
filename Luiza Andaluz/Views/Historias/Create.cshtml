@@ -3,75 +3,55 @@
 @{
     ViewData["Title"] = "Create";
 }
+<style>
+    body {
+        background-color: #75808b;
+    }
+</style>
 
-
-<h1>Contar a minha Historia</h1>
-    <hr />
-    <div class="row">
-        <div class="col-md-12">
-            <div>
-                <div class="form-group">
-                    <label class="control-label">Mapa</label>
-                    <div id="mapSecundario"></div>
+<main id="main" style="        background-color: #354856;
+        border-style: solid;
+        //border-width: 10px;
+        //border-radius: 25px;
+        padding: 15px;
+        border-color: #FFB81D;"
+      >
+    <div 
+         style="">
+        <h1 style="font: 'ITC Avant Garde Gothic Std'; color:#FFB81D">Contar a minha Historia</h1>
+        <hr />
+        <div class="row">
+            <div class="col-md-12">
+                <div>
+                    <div class="form-group">
+                        <label class="control-label" style="color:#FFB81D">Mapa</label>
+                        <div id="mapSecundario"></div>
+                    </div>
+                    <h4 id="aviso"></h4>
                 </div>
-                <h4 id="aviso"></h4>
-            </div>
-            <script>
+                <script>
             var map = L.map('mapSecundario').setView([39.6019900, -8.4092400], 4);
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 18
             }).addTo(map);
-
-            @*
-            const locationButton = document.createElement("button");
-            locationButton.textContent = "Ir para a minha localização";
-            locationButton.classList.add("custom-map-control-button");
-
-            map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-
-            locationButton.addEventListener("click", () => {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        (position) => {
-                            const pos = {
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude,
-                            };
-                            map.setCenter(pos);
-                        },
-                        () => {
-                            alert("Não foi possivel centrar o mapa na sua localização");
-                        }
-                    );
-                } else {
-                    alert("Não foi possivel centrar o mapa na sua localização");
-                }
-            });
-            *@
 
             var marker = null;
 
-            var greenIcon = L.icon({
-                iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
-                shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+                    var greenIcon = L.icon({
+                        iconUrl: 'assets/img/yellowIcon.png',
 
-                iconSize: [38, 95], // size of the icon
-                shadowSize: [50, 64], // size of the shadow
-                iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-                shadowAnchor: [4, 62],  // the same for the shadow
-                popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
-            });
+                        iconSize: [20, 50], // size of the icon
+                        iconAnchor: [11.6, 49.5], // point of the icon which will correspond to marker's location
+                        popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+                    });
 
-            var redIcon = L.icon({
-                iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-red.png',
-                shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+                    var redIcon = L.icon({
+                        iconUrl: 'assets/img/yellowIcon.png',
 
-                iconSize: [38, 95], // size of the icon
-                shadowSize: [50, 64], // size of the shadow
-                iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-                shadowAnchor: [4, 62],  // the same for the shadow
-                popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+                        iconSize: [20, 50], // size of the icon
+                        iconAnchor: [11.6, 49.5], // point of the icon which will correspond to marker's location
+                        popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
             });
 
             map.on("click", (event) => {
@@ -99,69 +79,90 @@
                     document.getElementById('aviso').innerHTML = "Localização Marcada";
                 });
             }
-            </script>
-            <br />
-            <div id="success-message-container" class="alert alert-success text-center d-none">
-                <strong>Success!</strong> You have been subscribed successfully!
-            </div>
+                </script>
+                <br />
+                <div id="success-message-container" class="alert alert-success text-center d-none">
+                    <strong>Success!</strong> You have been subscribed successfully!
+                </div>
 
-            <div id="failure-message-container" class="alert alert-danger text-center d-none">
-                <strong>Failure!</strong> There is some problem with the service.Please try again.If the problem persists
-                please contract with system administrator!
-            </div>
-            <form asp-action="Create" enctype="multipart/form-data" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group">
-                    <label asp-for="Titulo" class="control-label"></label>
-                    <input asp-for="Titulo" class="form-control" />
-                    <span asp-validation-for="Titulo" class="text-danger"></span>
+                <div id="failure-message-container" class="alert alert-danger text-center d-none">
+                    <strong>Failure!</strong> There is some problem with the service.Please try again.If the problem persists
+                    please contract with system administrator!
                 </div>
-                <div class="form-group">
-                    <label asp-for="Descricao" class="control-label"></label>
-                    <textarea asp-for="Descricao" rows="4" cols="50" class="form-control"></textarea>
-                    <span asp-validation-for="Descricao" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label class="control-label">Carregar Ficheiros</label>
-                    <br />
-                    <input type="file" style="color:blue;" name="fich" multiple="multiple" />
-                </div>
-                <div class="form-group">
-                    <label asp-for="Nome" class="control-label"></label>
-                    <input asp-for="Nome" class="form-control" />
-                    <span asp-validation-for="Nome" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Idade" class="control-label"></label>
-                    <input asp-for="Idade" class="form-control" />
-                    <span asp-validation-for="Idade" class="text-danger"></span>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Email" class="control-label"></label>
-                    <input asp-for="Email" class="form-control" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <input asp-validation-for="lat" type="hidden" id="lat" name="lat" value="0" />
-                <input asp-validation-for="lng" type="hidden" id="lng" name="lng" value="0" />
-                <div class="form-group">
-                    <input type="submit" value="Criar História" class="btn btn-primary" />
-                </div>
-            </form>
-            @if (ViewBag.Erro != null){
-                <script>
+                <form asp-action="Create" enctype="multipart/form-data" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Titulo" class="control-label" style="color:#FFB81D"></label>
+                        <input asp-for="Titulo" class="form-control" style="        background-color: #75808b;
+        border-color: #FFB81D;
+        color: #ffdfa4
+"/>
+                        <span asp-validation-for="Titulo" class="text-danger" ></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Descricao" class="control-label" style="color:#FFB81D"></label>
+                        <textarea asp-for="Descricao" rows="4" cols="50" class="form-control" style="        background-color: #75808b;
+        border-color: #FFB81D;
+        color: #ffdfa4
+"></textarea>
+                        <span asp-validation-for="Descricao" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label  for="file-upload" class="control-label btn btn-outline-primary" style="color:#FFB81D">
+                            Carregar Ficheiros
+                        </label>
+                        <input id="file-upload" type="file" name="fich" multiple="multiple" style="        display: none;
+        color: #ffdfa4
+" />
+
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Nome" class="control-label" style="color:#FFB81D"></label>
+                        <input asp-for="Nome" class="form-control" style="        background-color: #75808b;
+                        border-color: #FFB81D;
+                        color: #ffdfa4
+" />
+                        <span asp-validation-for="Nome" class="text-danger" ></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="DataNascimento" class="control-label" style="color:#FFB81D"></label>
+                        <input asp-for="DataNascimento" class="form-control" style="background-color: #75808b;
+                        border-color: #FFB81D;
+                        color: #ffdfa4
+"/>
+                        <span asp-validation-for="DataNascimento" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label" style="color:#FFB81D"></label>
+                        <input asp-for="Email" class="form-control" style="        background-color: #75808b;
+                         border-color: #FFB81D;
+                         color: #ffdfa4
+"/>
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <input asp-validation-for="lat" type="hidden" id="lat" name="lat" value="0" />
+                    <input asp-validation-for="lng" type="hidden" id="lng" name="lng" value="0" />
+                    <div class="form-group">
+                        <input type="submit" value="Criar História" class="control-label btn btn-outline-primary" style="color:#FFB81D" />
+                    </div>
+                </form>
+                @if (ViewBag.Erro != null)
+                {
+                    <script>
                     window.onload = function () {
                         alert("@ViewBag.Erro");
                     };
-                </script>
-            }
+                    </script>
+                }
+            </div>
+        </div>
+
+        <div>
+            <a asp-action="Index" class="control-label btn btn-outline-primary" style="color:#FFB81D">Lista de Histórias</a>
         </div>
     </div>
+    </main>
 
-    <div>
-        <a asp-action="Index">Lista de Histórias</a>
-    </div>
-
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

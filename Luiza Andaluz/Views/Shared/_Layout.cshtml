@@ -41,7 +41,7 @@
 
     <style>
         #mapPrincipal {
-            height: 600px;
+            height: 100vh;
             width: 100%
         }
 
@@ -68,29 +68,39 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm"
+             style="font:'ITC Avant Garde Gothic Std';background-color: #253746">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Luiza Andaluz</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="assets\img\FAVICON-LACC-YELLOW.png" title="title" alt="additional title" width="30" height="30" />
+                    <img src="assets\img\ASS-LACC-YELLOW.png" title="title" alt="additional title" height="25" />
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="Create">Contar a minha Historia</a>
+                            <a class="nav-link" asp-area="" asp-controller="Historias" asp-action="Create"
+                               style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D">Contar a minha Historia</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="Index">Histórias</a>
+
+                            <a class="nav-link" asp-area="" asp-controller="Historias" asp-action="Index"
+                               style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D">Histórias</a>
                         </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Historias" asp-action="PorValidar">Validar</a>
+                                <a class="nav-link " asp-area="" asp-controller="Historias" asp-action="PorValidar"
+                                   style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D">Validar</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="UtilizadoresEsperas" asp-action="">Admitir</a>
+                                <a class="nav-link " asp-area="" asp-controller="UtilizadoresEsperas" asp-action=""
+                                   style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D">Admitir</a>
                             </li>
                         }
                     </ul>
@@ -98,20 +108,21 @@
             </div>
         </nav>
     </header>
-
-    <div class="container">
-        <main role="main" class="pb-3">
+    <br /><br />
+    <div class="container" style="background-color:>
+        <main role="main" class="pb-3" ">
             @RenderBody()
         </main>
     </div>
     <br />
     <br />
-
+    <!--
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2021 - Luiza_Andaluz - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+        -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

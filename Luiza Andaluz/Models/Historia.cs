@@ -34,9 +34,9 @@ namespace LuizaAndaluz.Models
         public String Nome { get; set; }
 
 
-        [Required(ErrorMessage = "A Idade é de preenchimento obrigatório.")]
-        [RegularExpression("[1-9][0-9]", ErrorMessage = "A idade deve ser entre 10 e 99 anos")]
-        public int Idade { get; set; }
+        [Required(ErrorMessage = "A Data nascimento é de preenchimento obrigatório.")]
+        //[RegularExpression("[1-9][0-9]", ErrorMessage = "A idade deve ser entre 10 e 99 anos")]
+        public DateTime DataNascimento { get; set; }
 
 
         [Required(ErrorMessage = "O Email é de preenchimento obrigatório.")]

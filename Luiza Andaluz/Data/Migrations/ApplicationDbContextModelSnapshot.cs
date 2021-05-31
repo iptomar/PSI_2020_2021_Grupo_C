@@ -49,6 +49,9 @@ namespace Luiza_Andaluz.Data.Migrations
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("DataNascimento")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
@@ -58,15 +61,14 @@ namespace Luiza_Andaluz.Data.Migrations
                     b.Property<bool>("Estado")
                         .HasColumnType("bit");
 
-                    b.Property<int>("Idade")
-                        .HasColumnType("int");
-
                     b.Property<string>("LocalFK")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(40)")
+                        .HasMaxLength(40);
 
                     b.Property<string>("Titulo")
                         .HasColumnType("nvarchar(max)");
