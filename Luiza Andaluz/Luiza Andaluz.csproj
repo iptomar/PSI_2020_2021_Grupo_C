@@ -17,6 +17,8 @@
     <Compile Remove="Data\Migrations\20210525150413_DataNascimento.Designer.cs" />
     <Compile Remove="Data\Migrations\20210525150507_DataNascimento.cs" />
     <Compile Remove="Data\Migrations\20210525150507_DataNascimento.Designer.cs" />
+    <Compile Remove="Data\Migrations\20210601143930_final.cs" />
+    <Compile Remove="Data\Migrations\20210601143930_final.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
