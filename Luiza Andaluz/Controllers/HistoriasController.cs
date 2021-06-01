@@ -287,7 +287,8 @@ namespace Luiza_Andaluz.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("ID,Titulo,Descricao,Nome,DataNascimento,Email")] Historia historia, List<IFormFile> fich, String lat, String lng){
             if (lat.Equals("0") || lng.Equals("0")){
-                ViewBag.Erro = "Insira um Local";
+                ViewBag.Erro = "Insira um Local!, atenção todos os ficheiros que carregou foram perdidos.";
+                ViewBag.locais = _context.Historias.Include(h => h.Local).Where(h => h.Estado == true).Select(l => l.Local).ToList();
                 return View();
             }
             bool locali = false;

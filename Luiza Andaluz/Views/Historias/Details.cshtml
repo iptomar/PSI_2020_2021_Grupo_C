@@ -6,14 +6,14 @@
 
 <style>
     body {
-        background-color: #75808b;
+       // background-color: #75808b;
     }
 </style>
 
-<main id="main" style="background-color: #354856;
-        border-style: solid;
-        padding: 15px;
-        border-color: #FFB81D;">
+<main id="main" style="//background-color: #354856;
+       // border-style: solid;
+       // padding: 15px;
+       // border-color: #FFB81D;">
 
     <div class="container">
         <h2 class="d-flex justify-content-center" style="font: 'ITC Avant Garde Gothic Std'; color:#FFB81D">História: @Html.DisplayFor(model => model.Titulo)</h2>
@@ -137,13 +137,10 @@
     }).addTo(map);
 
     var greenIcon = L.icon({
-        iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
-        shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+        iconUrl: 'assets/img/yellowIcon.png',
 
-        iconSize: [38, 95], // size of the icon
-        shadowSize: [50, 64], // size of the shadow
-        iconAnchor: [22, 94], // point of the icon which will correspond to marker's location
-        shadowAnchor: [4, 62],  // the same for the shadow
+        iconSize: [20, 50], // size of the icon
+        iconAnchor: [11.6, 49.5], // point of the icon which will correspond to marker's location
         popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
     });
 
