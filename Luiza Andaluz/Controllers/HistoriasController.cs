@@ -43,13 +43,13 @@ namespace Luiza_Andaluz.Controllers
         /// </summary>
         /// <returns>View com as historias de Luiza Andaluz</returns>
         // GET: Historias
-        public async Task<IActionResult> Index(){
-            var historias = _context.Historias.Include(h => h.Conteudo).ToList();
+        public IActionResult Index(){
+            var historias = _context.Historias.Where(h => h.Estado == true).Include(h => h.Conteudo).ToList();
 
             ViewBag.Page = 1;
             ViewBag.Historias = historias.Count;
 
-            return View(await _context.Historias.Where(h => h.Estado == true).ToListAsync());
+            return View(historias);
         }
 
         [HttpPost, ActionName("Index")]
