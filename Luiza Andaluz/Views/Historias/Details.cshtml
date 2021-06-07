@@ -75,14 +75,14 @@
                         if (item.value.Tipo.Contains("png") || item.value.Tipo.Contains("jpg") || item.value.Tipo.Contains("gif") || item.value.Tipo.Contains("jfif"))
                         {
                             <div class="carousel-item@(item.i == 0 ? " active" : "")">
-                                <img class="d-block w-100" src="~/Ficheiros/@item.value.Ficheiro">
+                                <img class="d-block w-100 style="max-height:500px;" src="~/Ficheiros/@item.value.Ficheiro">
                             </div>
                         }
                         else if (item.value.Tipo.Contains("mp4") || item.value.Tipo.Contains("mov"))
                         {
                             <div class="carousel-item@(item.i == 0 ? " active" : "")">
                                 <div class="embed-responsive embed-responsive-21by9">
-                                    <iframe class="d-block w-100 embed-responsive-item" src="~/Ficheiros/@item.value.Ficheiro" allowfullscreen></iframe>
+                                    <iframe class="d-block w-100 embed-responsive-item style="max-height:500px;" src="~/Ficheiros/@item.value.Ficheiro" allowfullscreen></iframe>
                                 </div>
                             </div>
                         }
