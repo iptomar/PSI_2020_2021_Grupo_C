@@ -20,9 +20,18 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
+            @if (item.Email.Length > 50)
+            {
+                <td style="word-break: break-all">
+                    @item.Email.Substring(0, 50)
+                </td>
+            }
+            else
+            {
+                <td style="word-break: break-all">
+                    @item.Email
+                </td>
+            }
             <td></td>
             <form method="post" asp-action="Admitir">
                 <input type="hidden" name="id" value="@item.ID" />

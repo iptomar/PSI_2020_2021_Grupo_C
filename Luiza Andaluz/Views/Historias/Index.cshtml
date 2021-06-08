@@ -66,28 +66,36 @@
             {
                 if (i == 0 || i == 3 || i == 6)
                 {
-                    <a href="historias/details/@items[i].ID">
-                        <h4 class="text-center mb-2" style="cursor:pointer;">@items[i].Titulo</h4>
+                <a href="historias/details/@items[i].ID">
+                    @if (items[i].Titulo.Length > 19)
+                    {
+                        <h4 class="text-center mb-2" style="cursor:pointer;">@items[i].Titulo.Substring(0,19)</h4>
+                    }
+                    else
+                    {
+                <h4 class="text-center mb-2" style="cursor:pointer;">@items[i].Titulo.Substring(0, 19)</h4>
+                    }
 
 
-                        @if (items[i].Conteudo.Count() == 0)
-                        {
-                            <img src="/Ficheiros/exemplo.jfif" class="w-100 shadow-1-strong rounded mb-4 gallery-image"
-                                 alt="/Ficheiros/exemplo.jfif"
-                                 style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
-                        }
-                        else if (items[i].Conteudo.First().Tipo == ".png" || items[i].Conteudo.First().Tipo == ".jpeg" || items[i].Conteudo.First().Tipo == ".jpg" || items[i].Conteudo.First().Tipo == ".gif" || items[i].Conteudo.First().Tipo == ".jfif")
-                        {
-                            <img src="/Ficheiros/@items[i].Conteudo.First().Ficheiro" class="w-100 shadow-1-strong rounded mb-4 gallery-image"
-                                 alt="/Ficheiros/@items[i].Conteudo.First().Ficheiro"
-                                 style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
-                        }
-                        else
-                        {
-                            <iframe class="card-img-top" src="/Ficheiros/@items[i].Conteudo.First().Ficheiro" allowfullscreen></iframe>
-                        }
 
-                    </a>
+                    @if (items[i].Conteudo.Count() == 0)
+                    {
+                        <img src="/Ficheiros/exemplo.jfif" class="w-100 shadow-1-strong rounded mb-4 gallery-image"
+                             alt="/Ficheiros/exemplo.jfif"
+                             style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+                    }
+                    else if (items[i].Conteudo.First().Tipo == ".png" || items[i].Conteudo.First().Tipo == ".jpeg" || items[i].Conteudo.First().Tipo == ".jpg" || items[i].Conteudo.First().Tipo == ".gif" || items[i].Conteudo.First().Tipo == ".jfif")
+                    {
+                        <img src="/Ficheiros/@items[i].Conteudo.First().Ficheiro" class="w-100 shadow-1-strong rounded mb-4 gallery-image"
+                             alt="/Ficheiros/@items[i].Conteudo.First().Ficheiro"
+                             style="width:inherit; border-radius:12px; object-fit:cover; height: @heights[i]px;" />
+                    }
+                    else
+                    {
+                        <iframe class="card-img-top" src="/Ficheiros/@items[i].Conteudo.First().Ficheiro" allowfullscreen></iframe>
+                    }
+
+                </a>
                 }
             }
         }
