@@ -65,12 +65,30 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Titulo)
-            </td>
-            <td class="text-wrap" style="word-break: break-all">
-                @Html.DisplayFor(modelItem => item.Descricao)
-            </td>
+            @if (item.Titulo.Length > 19)
+            {
+                <td style="word-break: break-all">
+                    @item.Titulo.Substring(0, 19)
+                </td>
+            }
+            else
+            {
+                <td style="word-break: break-all">
+                    @item.Titulo
+                </td>
+            }
+            @if (item.Descricao.Length > 55)
+            {
+                <td style="word-break: break-all">
+                    @item.Descricao.Substring(0, 55)
+                </td>
+            }
+            else
+            {
+                <td style="word-break: break-all">
+                    @item.Descricao
+                </td>
+            }
             <td>
                 @Html.DisplayFor(modelItem => item.Data)
             </td>
