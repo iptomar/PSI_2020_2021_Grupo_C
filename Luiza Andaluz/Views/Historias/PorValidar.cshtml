@@ -5,26 +5,55 @@
 }
 
 <h1>Histórias por Validar</h1>
-<form method="post" asp-action="PorValidar">
-    <div class="form-group row">
-        <label for="Titulo" class="col-form-label ml-3"><b>Titulo</b></label>
-        <input class="form-control col-2 mx-2" type="text" name="titulo">
+<div class="row mx-3 mb-3">
+    <form method="post" asp-action="Index">
+        <input class="d-none" type="text" name="page" value="1">
+        <div class="row">
+            <div class="col-md-auto col-sm-12">
+                <div class="form-outline">
+                    <label class="form-label" for="titulo"><b>Titulo:</b></label>
+                    <input type="text" id="titulo" name="titulo" class="form-control" />
+                </div>
+            </div>
 
-        <label for="Titulo" class="col-form-label"><b>Descrição</b></label>
-        <input class="form-control col-2 mx-2" type="text" name="descricao">
+            <div class="col-md-auto col-sm-12">
+                <div class="form-outline">
+                    <label class="form-label" for="descricao"><b>Descrição:</b></label>
+                    <input type="text" id="descricao" name="descricao" class="form-control" />
+                </div>
+            </div>
 
-        <label for="Titulo" class="col-form-label"><b>Data</b></label>
-        <input class="form-control col-2 mx-2" type="date" name="data">
-        <input class="btn-success btn" type="submit" value="Pesquisar" />
+            <div class="col-md-auto col-sm-12">
+                <div class="form-outline">
+                    <label class="form-label" for="data"><b>Data:</b></label>
+                    <input type="date" id="data" name="data" class="form-control" />
+                </div>
+            </div>
+
+            <div class="col-md-auto col-sm-12 mr-md-4 mt-2">
+                <div class="form-outline">
+                    <label class="form-label" for="pesquisar"><b> </b></label>
+                    <input class="btn-success btn form-control " type="submit" name="pesquisar" value="Pesquisar" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-md-auto col-sm-12 px-0 mt-2">
+        <form method="get" asp-action="porValidar">
+            <div class="form-outline">
+                <label class="form-label" for="liimpar"><b> </b></label>
+                <input class="btn-warning btn form-control" type="submit" name="limpar" value="Limpar" />
+            </div>
+        </form>
     </div>
-</form>
+</div>
 <table class="table">
     <thead>
         <tr>
-            <th>
+            <th style="font: 'ITC Avant Garde Gothic Std'; color: #FFB81D ">
                 @Html.DisplayNameFor(model => model.Titulo)
             </th>
-            <th>
+            <th style="font: 'ITC Avant Garde Gothic Std'; color: #FFB81D ">
                 @Html.DisplayNameFor(model => model.Descricao)
             </th>
             <th>
@@ -39,7 +68,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Titulo)
             </td>
-            <td style="word-break: break-all">
+            <td class="text-wrap" style="word-break: break-all">
                 @Html.DisplayFor(modelItem => item.Descricao)
             </td>
             <td>
@@ -47,9 +76,17 @@
             </td>
             <td>
                 <a class="btn btn-warning mx-1" asp-action="Edit" asp-route-id="@item.ID">Alterar </a>
+
+            </td>
+            <td>
                 <a class="btn btn-info mx-1" asp-action="Details" asp-route-id="@item.ID">Detalhes</a>
+
+            </td>
+
+            <td>
                 <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.ID"> Apagar</a>
             </td>
+           
         </tr>
 }
     </tbody>

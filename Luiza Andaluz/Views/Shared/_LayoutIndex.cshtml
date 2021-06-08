@@ -8,6 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Luiza_Andaluz</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/sidebar.css" />
@@ -49,62 +50,96 @@
             height: 400px;
             width: 100%
         }
+
+
+        body {
+            background-color: #253746 !important;
+            font: 'ITC Avant Garde Gothic Std' !important;
+            color: #FFB81D !important
+        }
+
+        p, h1, h2, h3, h4, a, b, label, th, td {
+            color: #FFB81D
+        }
+
+        .gallery-image:hover {
+            border: 5px solid #FFB81D;
+            overflow: hidden;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm  border-bottom box-shadow" 
-              style="font:'ITC Avant Garde Gothic Std';background-color: #253746"
-             >
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm  border-bottom box-shadow"
+             style="font: 'ITC Avant Garde Gothic Std'; border-bottom: 1px solid #FFB81D;">
             <div class="container">
-               
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="assets\img\FAVICON-LACC-YELLOW.png" title="title" alt="additional title" width="30" height="30" />
-                    <img src="assets\img\ASS-LACC-YELLOW.png" title="title" alt="additional title"  height="25" />
+                    <img src="assets\img\ASS-LACC-YELLOW.png" title="title" alt="additional title" height="25" />
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" onclick="reload()">
+                    <span class="navbar-toggler-icon" style="        border: 5px solid #FFB81D; border-radius: 4px;
+        ;"></span>
                 </button>
+
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <partial name="_LoginPartial" />
+
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Historias" asp-action="Create"
                                style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D">Contar a minha Historia</a>
                         </li>
                         <li class="nav-item">
+
                             <a class="nav-link" asp-area="" asp-controller="Historias" asp-action="Index"
                                style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D">Histórias</a>
                         </li>
                         @if (SignInManager.IsSignedIn(User) && User.IsInRole("admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Historias" asp-action="PorValidar"
+                                <a class="nav-link " asp-area="" asp-controller="Historias" asp-action="PorValidar"
                                    style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D">Validar</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="UtilizadoresEsperas" asp-action=""
+                                <a class="nav-link " asp-area="" asp-controller="UtilizadoresEsperas" asp-action=""
                                    style="font:'ITC Avant Garde Gothic Std'; color:#FFB81D">Admitir</a>
                             </li>
                         }
+                        <partial name="_LoginPartial" />
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <main role="main" class="pb-3">
-        @RenderBody()
-    </main>
 
-    <footer class="border-top footer text-muted">
+
+    <main role="main" class="pb-3">
+
+           @RenderBody()
+
+        </main>
+
+ 
+
+
+    <!--<footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2021 - Luiza_Andaluz - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
-    </footer>
+    </footer>-->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        var pageR = 0;
+        function reload() {
+            pageR++;
+            if (pageR > 1) {
+                window.location.reload();
+            }
+        }
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>
