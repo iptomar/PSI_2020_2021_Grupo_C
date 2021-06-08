@@ -107,8 +107,9 @@
                         </label>
                         <input id="file-upload" type="file" name="fich" multiple="multiple" style="        display: none;
         color: #ffdfa4
-" />
-
+" 
+                               onclick="ficheiroCarregado()"/>
+                        <p id="fichC"></p>
                     </div>
                     <div class="form-group">
                         <label asp-for="Nome" class="control-label" style="color:#FFB81D"></label>
@@ -156,7 +157,11 @@
         </div>
     </div>
     </main>
-
+    <script>
+       function ficheiroCarregado(){
+           document.getElementById("fichC").innerHTML = "Ficheiro(s) Carregado";
+        }
+    </script>
     @section Scripts {
         @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     }
