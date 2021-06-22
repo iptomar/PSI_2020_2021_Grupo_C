@@ -305,9 +305,12 @@ namespace Luiza_Andaluz.Controllers
                 locali = true;
             }
             var user = await _userManager.GetUserAsync(User);
-            var roles = await _userManager.GetRolesAsync(user);
             historia.Estado = false;
-            if (roles.Count != 0) historia.Estado = true;
+            if(user != null){
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles.Count != 0) historia.Estado = true;
+            }
+            
             historia.ID = Guid.NewGuid().ToString();
             historia.LocalFK = local.ID;
             historia.Local = local;
