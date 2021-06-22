@@ -10,11 +10,10 @@
         border-style: solid;
         border-color: #FFB81D;'}></div>
     <script>
-        var map = L.map('mapPrincipal').setView([39.6019900, -8.4092400], 4);
+        var map = L.map('mapPrincipal', {minZoom: 4}).setView([39.6019900, -8.4092400], 4);
        
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 18
-                }).addTo(map);
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
 
                 var greenIcon = L.icon({
                     iconUrl: 'assets/img/yellowIcon.png',

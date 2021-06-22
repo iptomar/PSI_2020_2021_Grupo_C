@@ -130,8 +130,7 @@
 </main>
 
 <script>
-    var map = L.map('mapSecundario').setView([parseFloat(@ViewBag.Latitude), parseFloat(@ViewBag.Longitude)], 11);
-
+    var map = L.map('mapSecundario', { minZoom: 4 }).setView([parseFloat(@ViewBag.Latitude), parseFloat(@ViewBag.Longitude)], 11);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom:18
     }).addTo(map);
