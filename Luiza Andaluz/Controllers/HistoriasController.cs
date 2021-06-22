@@ -399,7 +399,7 @@ namespace Luiza_Andaluz.Controllers
         [ValidateAntiForgeryToken]
         [Authorize]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Edit(string id, [Bind("ID,Titulo,Descricao,Estado,Nome,DataNascimento,Email,UtilizadorFK")] Historia historia, String lat, String lng)
+        public async Task<IActionResult> Edit(string id, [Bind("ID,Titulo,Descricao,Estado,Nome,DataNascimento,Email")] Historia historia, String lat, String lng)
         {
             if (id != historia.ID)
             {
