@@ -200,7 +200,7 @@ namespace Luiza_Andaluz.Controllers
                     ID = x.ID,
                     Descricao = x.Descricao,
                     Titulo = x.Titulo,
-                    Data = x.DataNascimento.ToString("dd-MM-yyyy"),
+                    Data = x.Data.ToString("dd-MM-yyyy"),
                     Conteudo = x.Conteudo.Count != 0 ? x.Conteudo.ToList()[0].Ficheiro : "nada"
                 }).ToList();
             }
@@ -305,8 +305,9 @@ namespace Luiza_Andaluz.Controllers
                 locali = true;
             }
             var user = await _userManager.GetUserAsync(User);
+            var roles = await _userManager.GetRolesAsync(user);
             historia.Estado = false;
-            if (user != null) historia.Estado = true;
+            if (roles.Count != 0) historia.Estado = true;
             historia.ID = Guid.NewGuid().ToString();
             historia.LocalFK = local.ID;
             historia.Local = local;
