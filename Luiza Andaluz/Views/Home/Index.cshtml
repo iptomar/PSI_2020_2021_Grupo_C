@@ -52,7 +52,7 @@
                                 response.forEach(element => {
                                     console.log(element);
                                     s += "<div class='card'>";
-                                    if (element.conteudo.endsWith('png') || element.conteudo.endsWith("jpg") || element.conteudo.endsWith("gif") || element.conteudo.endsWith("jfif")) {
+                                    if (element.conteudo.endsWith('png') || element.conteudo.endsWith("jpg") || element.conteudo.endsWith("gif") || element.conteudo.endsWith("jfif") || element.conteudo.endsWith("jpeg")) {
                                         s += "<img src='/Ficheiros/" + element.conteudo + "' class='card-img-top' alt='/Ficheiros/" + element.conteudo + "'>";
                                     }
                                     else if (element.conteudo.endsWith('mp4') || element.conteudo.endsWith("mov")) {
