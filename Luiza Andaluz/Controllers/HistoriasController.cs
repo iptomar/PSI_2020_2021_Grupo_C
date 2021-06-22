@@ -200,7 +200,7 @@ namespace Luiza_Andaluz.Controllers
                     ID = x.ID,
                     Descricao = x.Descricao,
                     Titulo = x.Titulo,
-                    Data = x.Data.ToString("dd-MM-yyyy"),
+                    Data = x.DataNascimento.ToString("dd-MM-yyyy"),
                     Conteudo = x.Conteudo.Count != 0 ? x.Conteudo.ToList()[0].Ficheiro : "nada"
                 }).ToList();
             }
@@ -399,7 +399,7 @@ namespace Luiza_Andaluz.Controllers
         [ValidateAntiForgeryToken]
         [Authorize]
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> Edit(string id, [Bind("ID,Titulo,Descricao,Estado,Nome,Idade,Email,UtilizadorFK")] Historia historia, String lat, String lng)
+        public async Task<IActionResult> Edit(string id, [Bind("ID,Titulo,Descricao,Estado,Nome,DataNascimento,Email,UtilizadorFK")] Historia historia, String lat, String lng)
         {
             if (id != historia.ID)
             {
